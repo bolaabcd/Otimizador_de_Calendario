@@ -13,7 +13,7 @@ Ana Luiza - Backend
 
 Artur Gaspar - Fullstack 
 
-Denilsona Martins - Backend 
+Denilson Martins - Backend 
 
 Vinicius Bonfim - Front End 
 
