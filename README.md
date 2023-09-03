@@ -26,3 +26,32 @@ Resolvedor de Programação Inteira: GLPK
 
 Frontend: Python (Django)
 
+
+## Backlog do produto:
+
+
+1) Como usuário, gostaria de CRUD (Create, Read, Update, Delete) atividades no sistema (horário, local, pessoa envolvida, valor associado).
+
+2) Como usuário, gostaria de poder especificar alternativas de horários, locais e Indivíduos para cada atividade, além das minhas preferências de valor de cada atividade.
+
+3) Como usuário, gostaria de descobrir a escolha ótima de atividades possíveis de fazer segundo minhas preferências e restrições.
+
+4) Como usuário, gostaria de poder exportar e importar os dados das minhas atividades e de escolhas ótimas.
+
+5) Como usuário, gostaria de dar acesso às minhas atividades e escolhas ótimas para outros usuários (leitura e/ou edição).
+
+6) Como admin, gostaria de poder limitar a quantidade de recursos disponíveis para cada usuário.
+
+7) Como admin, gostaria de poder banir e readicionar usuários.
+
+8) Como usuário, gostaria de visualizar minhas atividades em formato de calendário.
+
+9) Como usuário, gostaria de exportar minhas atividades para o Google Calendar.
+
+10) Como usuário, gostaria de configurar atividades de escopo semanal, mensal ou anual.
+
+
+
+## Backlog da sprint:
+
+Histórias 1, 2, 3 e 4 do Backlog do produto.
