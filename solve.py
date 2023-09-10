@@ -8,8 +8,17 @@ class activity:
 		self.people = peopleID
 		self.value = value
 
-# TODO: Times with intersection
-def getProblem(ntimes,nplaces,npeople,activities):
+def getIncompTimes(times):
+	ans = []
+	for i,t1 in enumerate(times):
+		for j,t2 in enumerate(times):
+			if i < j and t2[0] <= t1[0] < t2[1] or t2[0] < t1[1] <= t2[1]:
+				ans.append((i,j))
+	return ans
+
+def getProblem(times,nplaces,npeople,activities):
+	ntimes = len(times)
+	incomptimes = getIncompTimes(times)
 	# Preparing variables
 	rti = range(ntimes)
 	rpl = range(nplaces)
@@ -29,18 +38,18 @@ def getProblem(ntimes,nplaces,npeople,activities):
 		# No two activities at the same place and time
 		for j,act2 in enumerate(activities):
 			if i != j:
-				for t in rti:
+				for t1,t2 in incomptimes:
 					for p in rpl:
-						if t in act.times and t in act2.times and p in act.places and p in act2.places:
-							prob += timeVars[i][t]+timeVars[j][t]+placeVars[i][p]+placeVars[j][p] <= 3
+						if t1 in act.times and t2 in act2.times and p in act.places and p in act2.places:
+							prob += timeVars[i][t1]+timeVars[j][t2]+placeVars[i][p]+placeVars[j][p] <= 3
 
 		# No two activities with the same person at the same time
 		for j,act2 in enumerate(activities):
 			if i != j:
-				for t in rti:
+				for t1,t2 in incomptimes:
 					for p in rpe:
-						if t in act.times and t in act2.times and p in act.people and p in act2.people:
-							prob += timeVars[i][t]+timeVars[j][t]+peopleVars[i][p]+peopleVars[j][p] <= 3
+						if t1 in act.times and t2 in act2.times and p in act.people and p in act2.people:
+							prob += timeVars[i][t1]+timeVars[j][t2]+peopleVars[i][p]+peopleVars[j][p] <= 3
 
 		# Each chosen activity has exactly one person, place and time attached to it.
 		onetime = []
@@ -61,9 +70,10 @@ def getProblem(ntimes,nplaces,npeople,activities):
 
 if __name__ == "__main__":
 	print("Debugging...")
-	act1 = activity([0], [1], [0], 2)
-	act2 = activity([0], [0,1], [0,1], 1)
-	prob = getProblem(2,2,2,[act1,act2])
+	act1 = activity([0], [1], [0], 1)
+	act2 = activity([1], [1], [0], 1)
+	times = [(1,3),(2,4)]
+	prob = getProblem(times,2,2,[act1,act2])
 	print(prob)
 	prob.writeLP("test.lp")
 	prob.solve()
