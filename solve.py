@@ -82,15 +82,8 @@ def getProblem(times,nplaces,npeople,activities):
 	return prob
 
 
-if __name__ == "__main__":
-	print("Debugging...")
-	act1 = activity([0], [1], [0], 1)
-	act2 = activity([1], [1], [0], 1)
-	times = [((1,3),(1,2)),((1,2),(3,4),)]
-	prob = getProblem(times,2,2,[act1,act2])
-	print(prob)
-	prob.writeLP("test.lp")
-	prob.solve()
+def seeSolution(prob):
+	prob.solve(GLPK())
 	print("Status:", LpStatus[prob.status])
 	# Print the value of the variables at the optimum
 	for v in prob.variables():
@@ -99,3 +92,30 @@ if __name__ == "__main__":
 	# Print the value of the objective
 	print("objective=", value(prob.objective))
 
+if __name__ == "__main__":
+	print("Debugging...")
+	act1 = activity([0], [1], [0], 1)
+	act2 = activity([1], [1], [0], 1)
+	times = [((1,3),(1,2)),((1,2),(3,4),)]
+	prob = getProblem(times,2,2,[act1,act2])
+	print(prob)
+	prob.writeLP("test.lp")
+	seeSolution(prob)
+	
+	
+	print("\n\n\nIf no places times and people, answer should be 0:")
+	acts = [activity([],[],[],1) for i in range(10)]
+	prob = getProblem([],0,0,acts)
+	print(prob)
+	seeSolution(prob)
+
+	N = 20
+	print(f"\n\n\nBigger test, all are possible, answer should be {N}:")
+	acts = [activity(range(i+1),range(i+1),range(i+1),1) for i in range(N)]
+	times = [[(j,i) for j in range(i+1)] for i in range(N)]
+	prob = getProblem(times,N,N,acts)
+	seeSolution(prob)
+	# 0m11,823s -> default, N = 15
+	# 0m7,548s -> GLPK, N = 15
+	# 1m2,272s -> default, N = 20
+	# 0m36,996s -> GLPK , N = 20
