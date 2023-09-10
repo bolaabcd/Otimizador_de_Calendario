@@ -10,13 +10,27 @@ class activity:
 
 def getIncompTimes(times):
 	ans = []
-	for i,t1 in enumerate(times):
-		for j,t2 in enumerate(times):
-			if i < j and t2[0] <= t1[0] < t2[1] or t2[0] < t1[1] <= t2[1]:
-				ans.append((i,j))
+	for i,ins1 in enumerate(times):
+		for j,ins2 in enumerate(times):
+			if i < j:
+				for a,b in ins1:
+					out = False
+					for c,d in ins2:
+						if a <= c < b or a < d <= b:
+							ans.append((i,j))
+							out = True
+							break
+					if out:
+						break
 	return ans
 
+def checkTimes(times):
+	for intervals in times:
+		for a,b in intervals:
+			assert(a <= b)
+
 def getProblem(times,nplaces,npeople,activities):
+	checkTimes(times)
 	ntimes = len(times)
 	incomptimes = getIncompTimes(times)
 	# Preparing variables
@@ -72,7 +86,7 @@ if __name__ == "__main__":
 	print("Debugging...")
 	act1 = activity([0], [1], [0], 1)
 	act2 = activity([1], [1], [0], 1)
-	times = [(1,3),(2,4)]
+	times = [((1,3),(1,2)),((1,2),(3,4),)]
 	prob = getProblem(times,2,2,[act1,act2])
 	print(prob)
 	prob.writeLP("test.lp")
