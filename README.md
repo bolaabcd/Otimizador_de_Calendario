@@ -55,3 +55,31 @@ Frontend: Python (Django)
 ## Backlog da sprint:
 
 Histórias 1, 2, 3 e 4 do Backlog do produto.
+
+
+## Setup
+
+Necessário python 3.10
+
+pipenv:
+```
+pip3 install pipenv
+```
+
+Entrar no venv:
+```
+pipenv shell
+```
+
+Executar server:
+```
+python3 manage.py runserver
+```
+
+
+## Convenções
+
+Declaração de variáveis e funções: Camel case, primeira letra minúscula
+Declaração de tipos: Camel case, primeira letra maiúscula
+
+Identação: 4 espaços
