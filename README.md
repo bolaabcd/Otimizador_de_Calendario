@@ -66,6 +66,11 @@ pipenv:
 pip3 install pipenv
 ```
 
+Instalar pacotes
+```
+pipenv install
+```
+
 Entrar no venv:
 ```
 pipenv shell
