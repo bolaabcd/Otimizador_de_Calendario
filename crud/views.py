@@ -1,6 +1,6 @@
 
 '''
-Código apenas para testar se há conexão entre Front, back e BD
+Código apenas para testar manualmente se há conexão entre Front, back e BD
 '''
 
 import json
@@ -9,6 +9,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseNotAllowed
 from django.db import models
 
 
+# Isso aqui é a declaração de uma tabela do BD
 class Nomes(models.Model):
     nome = models.CharField(max_length=100)
 
@@ -16,9 +17,11 @@ class Nomes(models.Model):
         return self.nome
     
 
+# Retornando o html da página inicial
 def homepage(request):
     return render(request, 'crud.html')
 
+# Retorna para o front os nomes registrados
 def update(request):
     dbRes = Nomes.objects.all()
     nomes = []
@@ -26,6 +29,7 @@ def update(request):
         nomes.append(str(nome))
     return JsonResponse({'names': nomes})
 
+# Recebe um nome do front, e guarda no Banco de dados
 def save(request):
     if request.method == 'POST':
         postData = request.body.decode('utf-8')
