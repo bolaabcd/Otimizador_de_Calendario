@@ -55,3 +55,81 @@ Frontend: Python (Django)
 ## Backlog da sprint:
 
 Histórias 1, 2, 3 e 4 do Backlog do produto.
+
+
+## Setup
+
+Necessário python 3.10
+
+pipenv:
+```
+pip3 install pipenv
+```
+
+Instalar pacotes
+```
+pipenv install
+```
+
+Entrar no venv:
+```
+pipenv shell
+```
+
+Executar server:
+```
+python3 manage.py runserver
+```
+
+
+## Convenções
+
+Declaração de variáveis e funções: Camel case, primeira letra minúscula
+Declaração de tipos: Camel case, primeira letra maiúscula
+
+Identação: 4 espaços
+
+
+## Instalação e setup do Banco de Dados
+
+É necessário antes instalar o mysql:
+```
+sudo apt install libmysqlclient-dev
+```
+
+Pode ser preciso também:
+```
+sudo apt install mysql-client-core-8.0
+```
+
+Se der tudo certo, será possível acessar o mysql. Talvez seja necessário sudo:
+```
+mysql -u root -p
+```
+
+A partir deste terminal crie um um novo banco de dados, crie um novo usuário e dê permissões à ele.
+```sql
+CREATE DATABASE nome_do_seu_banco_de_dados;
+CREATE USER 'seu_usuario'@'localhost' IDENTIFIED BY 'sua_senha';
+GRANT ALL PRIVILEGES ON nome_do_seu_banco_de_dados.* TO 'seu_usuario'@'localhost';
+```
+
+No caso para o exemplo de crud básico:
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'teste',  # substituir em nome_do_seu_banco_de_dados
+        'USER': 'teste',  # substituir em seu_usuario
+        'PASSWORD': '00000000',  # substituir em sua_senha
+        'HOST': 'localhost',
+        'PORT': ''
+    }
+}
+```
+
+Assim é possível entrar no mysql com outro usuário:
+```
+mysql -u teste -p
+```
+Ao digitar a senha corretamente, é esperado que você tenha acesso ao terminal do mysql.

@@ -1,0 +1,110 @@
+<!--
+    Código 95% chat GPT, teste inicial de conexão front - back - BD
+-->
+
+<!DOCTYPE html>
+<html lang='pt-br'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>CRUD</title>
+    </head>
+    <body>
+        <h3>Entre com o usuário a ser cadastrado</h3>
+        <input type='text' id='nomeInput' name='nome'>
+        <button id='save'>Cadastrar</button>
+
+        <button id='update'>Atualizar</button>
+
+        <div id='registry'></div>
+
+        <script>
+
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Verifica se o cookie começa com o nome desejado
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            async function sendGet(url) {
+                return fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('ERROR');
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        console.log('ERROR');
+                    });
+            }
+
+
+            function sendPost(url, data) {
+                console.log(JSON.stringify(data));
+                const csrftoken = getCookie('csrftoken');
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('ERROR');
+                    }
+
+                    const contentType = response.headers.get('content-type');
+                    if(contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    } else {
+                        return response.text();
+                    }
+                })
+                .then(data => {
+                })
+                .catch(error => {
+                });
+            }
+
+            const saveButton = document.getElementById('save');
+            const updateButton = document.getElementById('update');
+            const textInput = document.getElementById('nomeInput');
+            let registry = document.getElementById('registry');
+
+            saveButton.addEventListener('click', function() {
+                const inputValue = textInput.value;
+                textInput.value = '';
+                sendPost('save/', {name: inputValue});
+            });
+            
+            updateButton.addEventListener('click', async function() {
+                
+                const response = await sendGet('update/');
+
+                let html = '<h4>';
+                for(let i = 0; i < response.names.length; i++) {
+                    html += response.names[i];
+                    html += '</h4><h4>';
+                }
+                html += '</h4>';
+
+                registry.innerHTML = html;
+            });
+
+            
+        </script>
+    </body>
+</html>
