@@ -71,6 +71,11 @@ Instalar pacotes
 pipenv install
 ```
 
+Instalar GLPK
+```
+sudo apt install glpk-utils
+```
+
 Entrar no venv:
 ```
 pipenv shell
@@ -100,6 +105,11 @@ sudo apt install libmysqlclient-dev
 Pode ser preciso também:
 ```
 sudo apt install mysql-client-core-8.0
+```
+
+Para instalar o servidor mysql pode ser preciso:
+```
+sudo apt-get install mysql-server
 ```
 
 Se der tudo certo, será possível acessar o mysql. Talvez seja necessário sudo:

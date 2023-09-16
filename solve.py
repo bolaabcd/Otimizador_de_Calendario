@@ -1,7 +1,7 @@
 from pulp import *
 from itertools import combinations
 
-class activity:
+class Activity:
     def __init__(self, timesID=[], placesID=[], peopleID=[], value=1):
         self.times = timesID
         self.places = placesID
