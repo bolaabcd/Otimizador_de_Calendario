@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django = "4.2.5"
 mysqlclient = "2.2.0"
+pulp = "==2.7.0"
 
 [dev-packages]
 
