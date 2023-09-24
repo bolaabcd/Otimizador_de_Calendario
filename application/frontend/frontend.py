@@ -1,4 +1,5 @@
 
+from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 from ..domain.domain import Domain
 
@@ -13,8 +14,7 @@ class Frontend:
         pass
 
     def getHomePage(self, request: HttpRequest) -> HttpResponse:
-        # TODO
-        pass
+        return render(request, 'homepage.html')
 
     def createUser(self, request: HttpRequest) -> HttpResponse:
         # TODO

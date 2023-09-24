@@ -3,9 +3,76 @@
     <head>
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <title>Homepage</title>
+        <title>Otimizador de calendário</title>
     </head>
     <body>
-        <h1>Homepage</h1>
+        <button id = 'importFile'>Importar atividades de arquivo</button>
+        <button id = 'exportFile'>Exportar atividades para arquivo</button>
+        <button id = 'create'>Criar atividade</button>
+        <button id = 'read'>Carregar atividades</button>
+        <button id = 'update'>Editar atividades</button>
+        <button id = 'delete'>Remover atividades</button>
+        <button id = 'compute'>Computar escolha ótima</button>
+        <!-- Talvez queiramos mostrar como um calendario mesmo, estilo google calendar, e talvez nem precise de botão pra isso -->
+        <button id = 'visualize'>Visualizar calendário</button>
+
+        <ul> <!-- TODO: colocar as atividades aqui, dinamicamente, e de forma que dê pra ver tudo sobre elas. Cada uma deveria ter seu próprio botão de edição e deletar -->
+            <li>Primeira atividade (MUDAR)</li>
+            <li>Segunda atividade (MUDAR)</li>
+        </ul>
+
+
+        <script>
+            const importFileButton = document.getElementById('importFile');
+            const exportFileButton = document.getElementById('exportFile');
+            const createButton = document.getElementById('create');
+            const readButton = document.getElementById('read');
+            const updateButton = document.getElementById('update');
+            const deleteButton = document.getElementById('delete');
+            const computeButton = document.getElementById('compute');
+            const visualizeButton = document.getElementById('visualize');
+
+            importFileButton.addEventListener('click', function() {
+                // Abrir janela de escolher arquivo JSON
+                // Ler do arquivo escolhido os dados e passar pra tela
+            });
+
+            exportFileButton.addEventListener('click', function() {
+                // Criar arquivo JSON com os dados
+                // Fazer download do arquivo (janelinha pro usuário decidir oq fazer)
+            });
+
+            createButton.addEventListener('click', function() {
+                // Abrir janelinha pra preencher os dados da atividade
+                // Quando o usuário clica em concluído, salva no banco de dados e mostra na listinha
+            });
+
+            readButton.addEventListener('click', function() {
+                // Mandar um aviso de que vai sobrescrever oq tah na tela atualmente pelo que tá salvo no sistema
+                // Baixar do banco de dados as atividades
+                // Mostrar as atividades
+            });
+
+            updateButton.addEventListener('click', function() {
+                // Só envia a versão nova das atividades que foram modificados pro banco de dados
+            });
+
+            deleteButton.addEventListener('click', function() {
+                // Abre aviso de que vai apagar todas as atividades
+                // Apaga todas atividades no BD e na tela
+            });
+
+            computeButton.addEventListener('click', function() {
+                // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
+            });
+
+            visualizeButton.addEventListener('visualize', function() {
+                // Abrir janelinha com as opções de mostrar como semana mês ano etc (queremos isso?)
+                // Carregar visualização em formato de calendário com eventos nos horários
+                // Talvez nem precise desse botão e possa carregar automaticamente.
+                // Talvez esse botão troque entre a visualização como lista e a visualização como calendário
+            });
+
+        </script>
     </body>
 </html>
