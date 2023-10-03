@@ -1,0 +1,65 @@
+Para a configuração do mysql com django, segui esse vídeo https://www.youtube.com/watch?v=ZGGiBGTv9do
+
+1.
+CREATE DATABASE otimizador_db CHARACTER SET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+2.
+CREATE USER 'usuario'@'localhost' IDENTIFIED WITH mysql_native_password BY 'engsoft@123';
+3.
+GRANT ALL PRIVILEGES ON otimizador_db.* TO 'usuario'@'localhost' WITH GRANT OPTION;
+
+
+#ela rodou o venv, que já nao da certo no meu pc rs
+
+alterar o settings.py:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'otimizador_db',
+        'USER': 'usuario',
+        'PASSWORD': 'engsoft@123',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+        'charset': 'utf8mb4',
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    }
+}
+
+código SQL usado:
+
+USE otimizador_db;
+
+-- 1. Criando a tabela USER
+CREATE TABLE USER (
+    user_id INT PRIMARY KEY,
+    user_name VARCHAR(255)
+);
+
+-- 2. Criando a tabela DATES
+CREATE TABLE DATES (
+    date_id INT PRIMARY KEY, /*Pensei em uma chave do tipo YYMMDDYYMMDD que merge start_date e end_date*/
+    start_date DATE,
+    end_date DATE
+);
+
+-- 3. Criando a tabela PLACES
+CREATE TABLE PLACES (
+    place_id INT PRIMARY KEY,
+    address VARCHAR(255)
+);
+
+-- 4. Criando a tabela ACTIVITIES
+CREATE TABLE ACTIVITIES (
+    activity_id INT PRIMARY KEY,
+    user_id INT,
+    date_id INT,
+    place_id INT,
+    importance INT,
+    FOREIGN KEY (date_id) REFERENCES DATES(date_id),
+    FOREIGN KEY (place_id) REFERENCES PLACES(place_id),
+    FOREIGN KEY (user_id) REFERENCES USER(user_id)
+);
+
+/*FALTA CRIAR UMA TABELA QUE GUARDA A SAÍDA DO ALGORITMO*/
