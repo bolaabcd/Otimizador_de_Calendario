@@ -1,7 +1,7 @@
 from pulp import *
 from itertools import combinations
 
-class Activity:
+class ActivityIDs:
     def __init__(self, timesID=[], placesID=[], peopleID=[], value=1):
         self.times = timesID
         self.places = placesID
@@ -33,7 +33,7 @@ def checkTimes(times):
             assert(not(a <= c < b or a < d <= b))
 
 # Get pulp problem, which is ready to be solved by some solver
-def getProblem(times, nplaces, npeople, activities):
+def getProblem(times, nplaces, npeople, activitiesID):
     checkTimes(times)
     ntimes = len(times)
     incomptimes = getIncompTimes(times)
@@ -42,7 +42,7 @@ def getProblem(times, nplaces, npeople, activities):
     rti = range(ntimes)
     rpl = range(nplaces)
     rpe = range(npeople)
-    rac = range(len(activities))
+    rac = range(len(activitiesID))
     prob = LpProblem("calendar_optim", LpMaximize)
     timeVars = LpVariable.dicts("time", (rac, rti), cat = "Binary")
     placeVars = LpVariable.dicts("place", (rac, rpl), cat = "Binary")
@@ -50,13 +50,13 @@ def getProblem(times, nplaces, npeople, activities):
     actiVars = LpVariable.dicts("activity", (rac), cat = "Binary")
     # Constraints
     goal = []
-    for i, act in enumerate(activities):
+    for i, act in enumerate(activitiesID):
         # Objective function
         goal.append((actiVars[i], act.value))
 
-        # No two activities at the same place and time
+        # No two activitiesID at the same place and time
         pairs = []
-        for j, act2 in enumerate(activities):
+        for j, act2 in enumerate(activitiesID):
             if i != j:
                 for t1, t2 in incomptimes:
                     if t1 in act.times and t2 in act2.times:
@@ -66,9 +66,9 @@ def getProblem(times, nplaces, npeople, activities):
                 if p in act.places and p in act2.places:
                     prob += timeVars[i][t1]+timeVars[j][t2]+placeVars[i][p]+placeVars[j][p] <= 3
 
-        # No two activities with the same person at the same time
+        # No two activitiesID with the same person at the same time
         pairs = []
-        for j, act2 in enumerate(activities):
+        for j, act2 in enumerate(activitiesID):
             if i != j:
                 for t1, t2 in incomptimes:
                     if t1 in act.times and t2 in act2.times:
