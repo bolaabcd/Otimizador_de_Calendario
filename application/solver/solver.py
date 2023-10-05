@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from ..domain.domainTypes import Activity
 from typing import List
-from converter import ActivityIDs, getProblem, seeSolution #TODO: REMOVE THIS LAST ONE AFTER DEBUGGING
+from .converter import ActivityIDs, getProblem, seeSolution #TODO: REMOVE THIS LAST ONE AFTER DEBUGGING
 from pulp import GLPK
 
 
@@ -68,7 +68,7 @@ class concreteSolver(Solver):
                 peopleID[peop]
             activID = ActivityIDs(timesID,placesID,peopleID,act[3])
             activitiesID.append(activID)
-       prob = getProblem(timesList,len(placesList),len(peopleList),activitiesID)
+        prob = getProblem(timesList,len(placesList),len(peopleList),activitiesID)
 
         # TODO:REMOVE AFTER DEBUGGED:
         seeSolution(prob)
