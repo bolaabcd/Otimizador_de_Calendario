@@ -16,11 +16,7 @@
         <!-- Talvez queiramos mostrar como um calendario mesmo, estilo google calendar, e talvez nem precise de botão pra isso -->
         <button id = 'visualize'>Visualizar calendário</button>
 
-        <ul> <!-- TODO: colocar as atividades aqui, dinamicamente, e de forma que dê pra ver tudo sobre elas. Cada uma deveria ter seu próprio botão de edição e deletar -->
-            <li>Primeira atividade (MUDAR)</li>
-            <li>Segunda atividade (MUDAR)</li>
-        </ul>
-
+        <p></p>
         <div id = 'answer'>Atividades carregadas aparecerão aqui!</div>
 
 
@@ -38,8 +34,86 @@
                     });
             }
 
-            function showCalendar(activities) {
-                console.log(activities);
+
+            const activitiesList = document.getElementById('answer');
+
+            async function showCalendar(acts) {
+                var activities = (await acts).acts;
+                var ul = document.createElement('ul');
+                for(var i = 0; i < activities.length; i++) {
+                    var act = activities[i];
+
+                    var newLi = document.createElement("li");
+                    var ul2 = document.createElement('ul');
+                    newLi.appendChild(ul2);
+
+                    var liVal = document.createElement('li');
+                    var texVal = document.createTextNode('Valor = '+act.value.toString());
+                    liVal.appendChild(texVal);
+                    ul2.appendChild(liVal);
+
+
+                    var liPeop = document.createElement('li');
+                    var texPeop = document.createTextNode('Lista de pessoas:\n');
+                    liPeop.appendChild(texPeop);
+                    var ulPeop = document.createElement('ul');
+                    for(var j = 0; j < act.people.length; j++) {
+                        var person = act.people[j];
+                        var liPers = document.createElement('li');
+                        var texPers = document.createTextNode(person);
+                        liPers.appendChild(texPers);
+                        ulPeop.appendChild(liPers);
+                    }
+                    liPeop.appendChild(ulPeop);
+                    ul2.appendChild(liPeop)
+
+
+                    var liLocs = document.createElement('li');
+                    var texLocs = document.createTextNode('Lista de lugares:\n');
+                    liLocs.appendChild(texLocs);
+                    var ulLocs = document.createElement('ul');
+                    for(var j = 0; j < act.locations.length; j++) {
+                        var locat = act.locations[j];
+                        var liLoc = document.createElement('li');
+                        var texLoc = document.createTextNode(locat);
+                        liLoc.appendChild(texLoc);
+                        ulLocs.appendChild(liLoc);
+                    }
+                    liLocs.appendChild(ulLocs);
+                    ul2.appendChild(liLocs)
+
+
+                    var liScheds = document.createElement('li');
+                    var texScheds = document.createTextNode('Lista de alocações temporais:\n');
+                    liScheds.appendChild(texScheds);
+                    var ulScheds = document.createElement('ul');
+                    for(var j = 0; j < act.schedules.length; j++) {
+                        var schedul = act.schedules[j];
+                        var liSched = document.createElement('li');
+                        var texSched = document.createTextNode('Alocação número '+(i+1).toString()+':\n');
+                        liSched.appendChild(texSched);
+
+                        var ulSched = document.createElement('ul');
+                        for(var k = 0; k < schedul.length; k++) {
+                            var interv = schedul[k];
+                            var liInterv = document.createElement('li');
+                            var texInterv = document.createTextNode('Começo = '+interv[0]+', Fim = '+interv[1]);
+                            liInterv.appendChild(texInterv);
+                            ulSched.appendChild(liInterv);
+                        }
+                        liSched.appendChild(ulSched);
+                        ulScheds.appendChild(liSched);
+                    }
+                    liScheds.appendChild(ulScheds);
+                    ul2.appendChild(liScheds)
+
+
+                    ul.appendChild(newLi);
+                }
+                activitiesList.innerHTML = '';
+                texActs = document.createTextNode('Lista de atividades carregadas:\n');
+                activitiesList.appendChild(texActs);
+                activitiesList.appendChild(ul);
             }
 
             const importFileButton = document.getElementById('importFile');
@@ -50,6 +124,7 @@
             const deleteButton = document.getElementById('delete');
             const computeButton = document.getElementById('compute');
             const visualizeButton = document.getElementById('visualize');
+
 
             importFileButton.addEventListener('click', function() {
                 // Abrir janela de escolher arquivo JSON
