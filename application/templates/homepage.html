@@ -7,16 +7,16 @@
     </head>
     <body>
         <input id="file-input" type="file" name="name" style="display: none;" /> <!-- Invisivel mesmo -->
-        <button id = 'importFile'>Importar atividades de arquivo</button>
+        <button id = 'importFile'>Importar atividades de arquivo</button> <!-- Soh importa pra tela -->
         <button id = 'exportFile'>Exportar atividades para arquivo</button>
-        <button id = 'create'>Criar atividade</button>
-        <button id = 'read'>Carregar atividades</button>
-        <button id = 'update'>Editar atividades</button>
-        <button id = 'delete'>Remover atividades</button>
+        <button id = 'create'>Criar atividade</button> <!-- nao sincroniza com o banco de dados -->
+        <button id = 'delete'>Remover atividades</button> <!-- nao sincroniza com o banco de dados -->
+        <button id = 'read'>Carregar atividades salvas no sistema</button> 
+        <button id = 'update'>Salvar atividades no sistema</button>
         <button id = 'compute'>Computar escolha ótima</button>
         <!-- TODO: Talvez queiramos mostrar como um calendario mesmo, estilo google calendar, e talvez nem precise de botão pra isso -->
         <button id = 'visualize'>Visualizar calendário</button>
-        <button id = 'clean'> Limpar atividades </button>
+        <button id = 'clean'> Limpar atividades na tela</button>
 
         <p></p>
         <div id = 'loadedCalendar'>Atividades carregadas aparecerão aqui!</div>
@@ -223,6 +223,68 @@ if (typeof module !== 'undefined') {
                     });
             }
 
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Verifica se o cookie começa com o nome desejado
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            function sendPost(url, data) {
+                const csrftoken = getCookie('csrftoken');
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('ERROR');
+                    }
+
+                    const contentType = response.headers.get('content-type');
+                    if(contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    } else {
+                        return response.text();
+                    }
+                })
+                .then(data => {
+                })
+                .catch(error => {
+                });
+            }
+
+            function sendDelete(url) {
+                const csrftoken = getCookie('csrftoken');
+                return (fetch(url, {
+                    method : 'DELETE', 
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    }))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('ERROR');
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        console.log('ERROR');
+                    });
+            }
 
             const activitiesList = document.getElementById('loadedCalendar');
             var loadedActivities;
@@ -376,7 +438,13 @@ function selectFile(contentType, multiple){
 
             readButton.addEventListener('click', async function() {
                 // Mandar um aviso de que vai sobrescrever oq tah na tela atualmente pelo que tá salvo no sistema
-                if(confirm("Os dados na sua tela serão sobrescritos pelo que está salvo no banco de dados! Deseja continuar?")) {
+                var conf;
+                if (loadedActivities) {
+                    conf = confirm("Os dados na sua tela serão sobrescritos pelo que está salvo no sistema! Deseja continuar?");
+                } else {
+                    conf = true;
+                }
+                if(conf) {
                     // Baixar do banco de dados as atividades
                     let calend = sendGet('/getCalendar');
                     // Mostrar as atividades
@@ -386,11 +454,23 @@ function selectFile(contentType, multiple){
 
             updateButton.addEventListener('click', function() {
                 // Só envia a versão nova das atividades que foram modificados pro banco de dados
+                if(loadedActivities) {
+                    if(confirm("Os dados no sistema serão sobrescritos pelos da sua tela. Deseja continuar?")) {
+                        sendDelete('/deleteCalendar/')
+                        sendPost('/saveCalendar/',loadedActivities);
+                    }
+                } else {
+                    alert("Nada a enviar");
+                }
             });
 
             deleteButton.addEventListener('click', function() {
                 // Abre aviso de que vai apagar todas as atividades
-                // Apaga todas atividades no BD e na tela
+                if(confirm("Os dados no sistema E na sua tela serão permanentemente deletados! Deseja continuar?")) {
+                    // Apaga todas atividades no BD e na tela
+                    loadedActivities = null;
+                    sendDelete('/deleteCalendar/')
+                }
             });
 
             computeButton.addEventListener('click', function() {

@@ -24,3 +24,5 @@ def getCalendar(request: HttpRequest) -> HttpResponse:
 def optimizeCalendar(request: HttpRequest) -> HttpResponse:
     return Frontend().optimizeCalendar(request)
 
+def deleteCalendar(request: HttpRequest) -> HttpResponse:
+    return Frontend().deleteCalendar(request)

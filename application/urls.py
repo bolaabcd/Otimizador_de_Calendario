@@ -9,4 +9,5 @@ urlpatterns = [
     path('saveCalendar/', view=views.saveCalendar),
     path('getCalendar/', view=views.getCalendar),
     path('optimize/', view=views.optimizeCalendar),
+    path('deleteCalendar/', view=views.deleteCalendar),
 ]
