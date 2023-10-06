@@ -78,11 +78,15 @@ WSGI_APPLICATION = 'otimizador.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'teste',
-        'USER': 'teste',
-        'PASSWORD': '00000000',
+        'NAME': 'otimizador_db',
+        'USER': 'usuario',
+        'PASSWORD': 'engsoft@123',
         'HOST': 'localhost',
-        'PORT': ''
+        'PORT': '3306',
+        'OPTIONS': {
+        'charset': 'utf8mb4',
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
 

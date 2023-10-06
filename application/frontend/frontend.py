@@ -2,6 +2,8 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 from ..domain.domain import Domain
+from ..models import ActivityDB#, ScheduleDB, PersonDB, LocationDB, IntervalDB
+from django.http import JsonResponse
 
 class Frontend:
 
@@ -30,7 +32,11 @@ class Frontend:
 
     def getCalendar(self, request: HttpRequest) -> HttpResponse:
         # TODO
-        pass
+        dbres = ActivityDB.objects.all()
+        ans = []
+        for v in dbres:
+            ans.append(v.get_activity())
+        return JsonResponse({'acts':ans})
 
     def optimizeCalendar(self, request: HttpRequest) -> HttpResponse:
         # TODO
