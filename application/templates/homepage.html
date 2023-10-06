@@ -21,8 +21,27 @@
             <li>Segunda atividade (MUDAR)</li>
         </ul>
 
+        <div id = 'answer'>Atividades carregadas aparecerão aqui!</div>
+
 
         <script>
+            async function sendGet(url) {
+                return fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('ERROR');
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        console.log('ERROR');
+                    });
+            }
+
+            function showCalendar(activities) {
+                activit
+            }
+
             const importFileButton = document.getElementById('importFile');
             const exportFileButton = document.getElementById('exportFile');
             const createButton = document.getElementById('create');
@@ -49,8 +68,12 @@
 
             readButton.addEventListener('click', function() {
                 // Mandar um aviso de que vai sobrescrever oq tah na tela atualmente pelo que tá salvo no sistema
-                // Baixar do banco de dados as atividades
-                // Mostrar as atividades
+                if(confirm("Os dados na sua tela serão sobrescritos pelo que está salvo no banco de dados! Deseja continuar?")) {
+                    // Baixar do banco de dados as atividades
+                    let calend = sendGet('/getCalendar');
+                    // Mostrar as atividades
+                    showCalendar(calend);
+                }
             });
 
             updateButton.addEventListener('click', function() {
