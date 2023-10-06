@@ -35,7 +35,7 @@ class Frontend:
         dbres = ActivityDB.objects.all()
         ans = []
         for v in dbres:
-            ans.append(v.get_activity())
+            ans.append(v.toDict())
         return JsonResponse({'acts':ans})
 
     def optimizeCalendar(self, request: HttpRequest) -> HttpResponse:
