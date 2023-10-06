@@ -14,11 +14,12 @@
         <button id = 'update'>Editar atividades</button>
         <button id = 'delete'>Remover atividades</button>
         <button id = 'compute'>Computar escolha ótima</button>
-        <!-- Talvez queiramos mostrar como um calendario mesmo, estilo google calendar, e talvez nem precise de botão pra isso -->
+        <!-- TODO: Talvez queiramos mostrar como um calendario mesmo, estilo google calendar, e talvez nem precise de botão pra isso -->
         <button id = 'visualize'>Visualizar calendário</button>
+        <button id = 'clean'> Limpar atividades </button>
 
         <p></p>
-        <div id = 'answer'>Atividades carregadas aparecerão aqui!</div>
+        <div id = 'loadedCalendar'>Atividades carregadas aparecerão aqui!</div>
 
 
         <script>
@@ -223,7 +224,7 @@ if (typeof module !== 'undefined') {
             }
 
 
-            const activitiesList = document.getElementById('answer');
+            const activitiesList = document.getElementById('loadedCalendar');
             var loadedActivities;
 
             async function showCalendar(activities) {
@@ -313,6 +314,7 @@ if (typeof module !== 'undefined') {
             const deleteButton = document.getElementById('delete');
             const computeButton = document.getElementById('compute');
             const visualizeButton = document.getElementById('visualize');
+            const cleanButton = document.getElementById('clean');
 
 
 /*--------------------------------------------------------------------------------------------------------------- */
@@ -395,11 +397,19 @@ function selectFile(contentType, multiple){
                 // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
             });
 
-            visualizeButton.addEventListener('visualize', function() {
+            visualizeButton.addEventListener('click', function() {
                 // Abrir janelinha com as opções de mostrar como semana mês ano etc (queremos isso?)
                 // Carregar visualização em formato de calendário com eventos nos horários
                 // Talvez nem precise desse botão e possa carregar automaticamente.
                 // Talvez esse botão troque entre a visualização como lista e a visualização como calendário
+            });
+
+            cleanButton.addEventListener('click', function() {
+                // Limpar dados que estão sendo apresentados
+                if(confirm("Os dados apresentados serão apagados da sua tela! Deseja continuar?")) {
+                    activitiesList.innerHTML = 'Atividades carregadas aparecerão aqui!';
+                    loadedActivities = null;
+                }
             });
 
         </script>
