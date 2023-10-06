@@ -25,7 +25,7 @@ class Storage(ABC):
     def saveCalendar(
         self,
         user: User,
-        queryActivities: list[Activity],
-        optimizedActivities: list[Activity]
+        queryActivities: List[Activity],
+        optimizedActivities: List[Activity]
     ) -> bool:
         pass
