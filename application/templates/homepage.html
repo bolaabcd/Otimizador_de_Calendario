@@ -6,6 +6,7 @@
         <title>Otimizador de calendário</title>
     </head>
     <body>
+        <input id="file-input" type="file" name="name" style="display: none;" /> <!-- Invisivel mesmo -->
         <button id = 'importFile'>Importar atividades de arquivo</button>
         <button id = 'exportFile'>Exportar atividades para arquivo</button>
         <button id = 'create'>Criar atividade</button>
@@ -225,9 +226,8 @@ if (typeof module !== 'undefined') {
             const activitiesList = document.getElementById('answer');
             var loadedActivities;
 
-            async function showCalendar(acts) {
-                loadedActivities = (await acts).acts;
-                var activities = loadedActivities;
+            async function showCalendar(activities) {
+                loadedActivities = activities;
                 var ul = document.createElement('ul');
                 for(var i = 0; i < activities.length; i++) {
                     var act = activities[i];
@@ -314,18 +314,57 @@ if (typeof module !== 'undefined') {
             const computeButton = document.getElementById('compute');
             const visualizeButton = document.getElementById('visualize');
 
-            importFileButton.addEventListener('click', function() {
-                // Abrir janela de escolher arquivo JSON
 
+/*--------------------------------------------------------------------------------------------------------------- */
+/**
+ * Select file(s).
+ * @param {String} contentType The content type of files you wish to select. For instance, use "image/*" to select all types of images.
+ * @param {Boolean} multiple Indicates if the user can select multiple files.
+ * @returns {Promise<File|File[]>} A promise of a file or array of files in case the multiple parameter is true.
+ */
+function selectFile(contentType, multiple){
+    return new Promise(resolve => {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = multiple;
+        input.accept = contentType;
+
+        input.onchange = () => {
+            let files = Array.from(input.files);
+            if (multiple)
+                resolve(files);
+            else
+                resolve(files[0]);
+        };
+
+        input.click();
+    });
+}
+/*--------------------------------------------------------------------------------------------------------------- */
+
+            importFileButton.addEventListener('click', async function() {
+                // Abrir janela de escolher arquivo JSON
+                var fil = await selectFile('json',false);
                 // Ler do arquivo escolhido os dados e passar pra tela
+                var fr = new FileReader();
+                fr.onload = function (e) {
+                    var data = fr.result;
+                    showCalendar(JSON.parse(data));
+                }
+                fr.readAsText(fil);
             });
 
             exportFileButton.addEventListener('click', function() {
-                // Criar arquivo JSON com os dados
-                var json = JSON.stringify(loadedActivities);
-                var blob = new Blob([json], {type:"application/json;charset=utf-8"});
-                // Fazer download do arquivo
-                saveAs(blob, "calendario.json");
+                if(loadedActivities) {
+                    // Criar arquivo JSON com os dados
+                    var json = JSON.stringify(loadedActivities);
+                    var blob = new Blob([json], {type:"application/json;charset=utf-8"});
+                    // Fazer download do arquivo
+                    saveAs(blob, "calendario.json");
+                }
+                else {
+                    alert("Nada a salvar");
+                }
             });
 
             createButton.addEventListener('click', function() {
@@ -333,13 +372,13 @@ if (typeof module !== 'undefined') {
                 // Quando o usuário clica em concluído, salva no banco de dados e mostra na listinha
             });
 
-            readButton.addEventListener('click', function() {
+            readButton.addEventListener('click', async function() {
                 // Mandar um aviso de que vai sobrescrever oq tah na tela atualmente pelo que tá salvo no sistema
                 if(confirm("Os dados na sua tela serão sobrescritos pelo que está salvo no banco de dados! Deseja continuar?")) {
                     // Baixar do banco de dados as atividades
                     let calend = sendGet('/getCalendar');
                     // Mostrar as atividades
-                    showCalendar(calend);
+                    showCalendar((await calend).acts);
                 }
             });
 
