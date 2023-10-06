@@ -92,12 +92,10 @@ class Frontend:
                     acts.append(actConv)
 
                 sol = ConcreteSolver()
-                sol.solve(acts)
-
-                return HttpResponse()
+                ans = sol.solve(acts)
+                return JsonResponse({'acts':ans})
             except json.JSONDecodeError as e:
                 return JsonResponse({'error': 'JSON PARSING ERROR'}, status=400)
         else:
             return HttpResponseNotAllowed(['POST'])
-        pass
     

@@ -241,9 +241,9 @@ if (typeof module !== 'undefined') {
                 return cookieValue;
             }
 
-            function sendPost(url, data) {
+            async function sendPost(url, data) {
                 const csrftoken = getCookie('csrftoken');
-                fetch(url, {
+                return fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -264,6 +264,7 @@ if (typeof module !== 'undefined') {
                     }
                 })
                 .then(data => {
+                    return data;
                 })
                 .catch(error => {
                 });
@@ -293,7 +294,6 @@ if (typeof module !== 'undefined') {
             var loadedActivities;
 
             async function showCalendar(activities, element) {
-                loadedActivities = activities;
                 var ul = document.createElement('ul');
                 for(var i = 0; i < activities.length; i++) {
                     var act = activities[i];
@@ -345,7 +345,7 @@ if (typeof module !== 'undefined') {
                     for(var j = 0; j < act.schedules.length; j++) {
                         var schedul = act.schedules[j];
                         var liSched = document.createElement('li');
-                        var texSched = document.createTextNode('Alocação número '+(i+1).toString()+':\n');
+                        var texSched = document.createTextNode('Alocação número '+(j+1).toString()+':\n');
                         liSched.appendChild(texSched);
 
                         var ulSched = document.createElement('ul');
@@ -369,6 +369,12 @@ if (typeof module !== 'undefined') {
                 texActs = document.createTextNode('Lista de atividades carregadas:\n');
                 element.appendChild(texActs);
                 element.appendChild(ul);
+            }
+
+            function cleanScreen() {
+                    activitiesList.innerHTML = 'Atividades carregadas aparecerão aqui!';
+                    loadedActivities = null;
+                    answer.innerHTML = 'Escolha ótima aparecerá aqui '
             }
 
             const importFileButton = document.getElementById('importFile');
@@ -416,7 +422,10 @@ function selectFile(contentType, multiple){
                 var fr = new FileReader();
                 fr.onload = function (e) {
                     var data = fr.result;
-                    showCalendar(JSON.parse(data),activitiesList);
+                    var activities = JSON.parse(data);
+                    cleanScreen();
+                    loadedActivities = activities;
+                    showCalendar(activities,activitiesList);
                 }
                 fr.readAsText(fil);
             });
@@ -451,7 +460,10 @@ function selectFile(contentType, multiple){
                     // Baixar do banco de dados as atividades
                     let calend = sendGet('/getCalendar');
                     // Mostrar as atividades
-                    showCalendar((await calend).acts,activitiesList);
+                    var activities = (await calend).acts;
+                    cleanScreen();
+                    loadedActivities = activities;
+                    showCalendar(activities,activitiesList);
                 }
             });
 
@@ -471,15 +483,19 @@ function selectFile(contentType, multiple){
                 // Abre aviso de que vai apagar todas as atividades
                 if(confirm("Os dados no sistema E na sua tela serão permanentemente deletados! Deseja continuar?")) {
                     // Apaga todas atividades no BD e na tela
-                    loadedActivities = null;
                     sendDelete('/deleteCalendar/')
+                    cleanScreen();
                 }
             });
 
-            computeButton.addEventListener('click', function() {
-                // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
-                let data = sendPost('/optimize/',loadedActivities);
-                showCalendar(data,answer);
+            computeButton.addEventListener('click', async function() {
+                if(loadedActivities) {
+                    // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
+                    let promis = sendPost('/optimize/', loadedActivities);
+                    showCalendar((await promis).acts,answer)
+                } else {
+                    alert("Nada a enviar");
+                }
                 
             });
 
@@ -493,8 +509,7 @@ function selectFile(contentType, multiple){
             cleanButton.addEventListener('click', function() {
                 // Limpar dados que estão sendo apresentados
                 if(confirm("Os dados apresentados serão apagados da sua tela! Deseja continuar?")) {
-                    activitiesList.innerHTML = 'Atividades carregadas aparecerão aqui!';
-                    loadedActivities = null;
+                    cleanScreen();
                 }
             });
 

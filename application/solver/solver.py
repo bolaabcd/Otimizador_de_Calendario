@@ -63,7 +63,6 @@ class ConcreteSolver(Solver):
             timesList.append(eval(time))
         activitiesID = []
         for i,act in enumerate(activityList):
-            print(i,act)
             timesID = []
             placesID = []
             peopleID = []
@@ -77,9 +76,41 @@ class ConcreteSolver(Solver):
             activitiesID.append(activID)
         prob = getProblem(timesList,len(placesList),len(peopleList),activitiesID)
 
-        # TODO:REMOVE AFTER DEBUGGED:
-        seeSolution(prob)
+        prob.solve(GLPK())
 
         # Converting solution to output format
+        actsAns = [{} for _ in activitiesID]
+        for v in prob.variables():
+            if v.name[0] == 'a': # activity
+                actID = int(v.name[9:])
+                actsAns[actID]['selected'] = v.varValue
+            elif v.name[0] == 't': # time
+                actID, timID = v.name[5:].split('_')
+                actID = int(actID)
+                timID = int(timID)
+                actsAns[actID]['timID'] = int(timID)
+            elif v.name[1] == 'e': # person
+                actID, persID = v.name[7:].split('_')
+                actID = int(actID)
+                persID = int(persID)
+                actsAns[actID]['persID'] = int(persID)
+            elif v.name[1] == 'l': # place
+                actID, placID = v.name[6:].split('_')
+                actID = int(actID)
+                placID = int(placID)
+                actsAns[actID]['placID'] = int(placID)
+            else:
+                raise NotImplementedError()
 
         # recover original values from the IDs selected
+        answer = []
+        for i, actAns in enumerate(actsAns):
+            act = {}
+            if actAns['selected'] == 1:
+                act['schedules'] = [timesList[actAns['timID']]]
+                act['locations'] = [placesList[actAns['placID']]]
+                act['people'] = [peopleList[actAns['persID']]]
+                act['value'] = activityList[i][3]
+                answer.append(act)
+
+        return answer
