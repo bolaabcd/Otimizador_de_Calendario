@@ -2,7 +2,9 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 from ..domain.domain import Domain
+from ..domain.domainTypes import Activity, Schedule, Interval
 from ..models import ActivityDB, ScheduleDB, PersonDB, LocationDB, IntervalDB
+from ..solver.solver import ConcreteSolver
 from django.http import JsonResponse
 import json
 
@@ -71,6 +73,31 @@ class Frontend:
         return JsonResponse({'acts':ans})
 
     def optimizeCalendar(self, request: HttpRequest) -> HttpResponse:
-        # TODO
+        if request.method == 'POST':
+            postData = request.body.decode('utf-8')
+            try:
+                json_data = json.loads(postData)
+                acts = []
+                for actDict in json_data:
+                    locs = list(actDict['locations'])
+                    peopl = list(actDict['people'])
+                    scheds = []
+                    for sched in actDict['schedules']:
+                        intervLists = []
+                        for intervList in sched:
+                            intervLists.append(Interval(intervList[0],intervList[1]))
+                        schedConv = Schedule(intervLists)
+                        scheds.append(schedConv)
+                    actConv = Activity(schedules=scheds, locations=locs, people=peopl, value=actDict['value'])
+                    acts.append(actConv)
+
+                sol = ConcreteSolver()
+                sol.solve(acts)
+
+                return HttpResponse()
+            except json.JSONDecodeError as e:
+                return JsonResponse({'error': 'JSON PARSING ERROR'}, status=400)
+        else:
+            return HttpResponseNotAllowed(['POST'])
         pass
     

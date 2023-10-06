@@ -14,7 +14,7 @@ class Solver(ABC):
 
 
 
-class concreteSolver(Solver):
+class ConcreteSolver(Solver):
     
     def solve(self, activities: List[Activity]) -> List[Activity]:
         # Converting to format that can be used by Integer Programming Solver:
@@ -23,23 +23,29 @@ class concreteSolver(Solver):
         timesSet = set()
         activityList = []
         for activ in activities:
-            vals = []
             timList = []
             placList = []
             peopList = []
             for sched in activ.schedules:
                 schedList = []
-                for start, end in sched.intervs:
-                    schedList += [start,end]
-                timesSet.add(schedList)
+                for interv in sched.intervals:
+                    start = interv.start
+                    end = interv.end
+                    schedList += [[start,end]]
+                timesSet.add(str(schedList))
                 timList.append(schedList)
             for loc in activ.locations:
                 placesSet.add(loc)
-                peopList.append(loc)
+                placList.append(loc)
             for peop in activ.people:
                 peopleSet.add(peop)
                 peopList.append(peop)
-            activityList.append(vals)
+            actLi = []
+            actLi.append(timList)
+            actLi.append(placList)
+            actLi.append(peopList)
+            actLi.append(activ.value)
+            activityList.append(actLi)
         placesDict = {}
         peopleDict = {}
         timesDict = {}
@@ -54,18 +60,19 @@ class concreteSolver(Solver):
             peopleList.append(person)
         for i,time in enumerate(timesSet):
             timesDict[time] = i
-            timesList.append(time)
+            timesList.append(eval(time))
         activitiesID = []
         for i,act in enumerate(activityList):
+            print(i,act)
             timesID = []
             placesID = []
             peopleID = []
             for tims in act[0]:
-                timesID.append(timesDict[tims])
+                timesID.append(timesDict[str(tims)])
             for placs in act[1]:
                 placesID.append(placesDict[placs])
             for peop in act[2]:
-                peopleID[peop]
+                peopleID.append(peopleDict[peop])
             activID = ActivityIDs(timesID,placesID,peopleID,act[3])
             activitiesID.append(activID)
         prob = getProblem(timesList,len(placesList),len(peopleList),activitiesID)

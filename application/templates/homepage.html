@@ -20,7 +20,9 @@
 
         <p></p>
         <div id = 'loadedCalendar'>Atividades carregadas aparecerão aqui!</div>
-
+        <p></p>
+        <p></p>
+        <div id = 'answer'>Escolha ótima aparecerá aqui </div>
 
         <script>
 
@@ -287,9 +289,10 @@ if (typeof module !== 'undefined') {
             }
 
             const activitiesList = document.getElementById('loadedCalendar');
+            const answer = document.getElementById('answer');
             var loadedActivities;
 
-            async function showCalendar(activities) {
+            async function showCalendar(activities, element) {
                 loadedActivities = activities;
                 var ul = document.createElement('ul');
                 for(var i = 0; i < activities.length; i++) {
@@ -362,10 +365,10 @@ if (typeof module !== 'undefined') {
 
                     ul.appendChild(newLi);
                 }
-                activitiesList.innerHTML = '';
+                element.innerHTML = '';
                 texActs = document.createTextNode('Lista de atividades carregadas:\n');
-                activitiesList.appendChild(texActs);
-                activitiesList.appendChild(ul);
+                element.appendChild(texActs);
+                element.appendChild(ul);
             }
 
             const importFileButton = document.getElementById('importFile');
@@ -413,7 +416,7 @@ function selectFile(contentType, multiple){
                 var fr = new FileReader();
                 fr.onload = function (e) {
                     var data = fr.result;
-                    showCalendar(JSON.parse(data));
+                    showCalendar(JSON.parse(data),activitiesList);
                 }
                 fr.readAsText(fil);
             });
@@ -448,7 +451,7 @@ function selectFile(contentType, multiple){
                     // Baixar do banco de dados as atividades
                     let calend = sendGet('/getCalendar');
                     // Mostrar as atividades
-                    showCalendar((await calend).acts);
+                    showCalendar((await calend).acts,activitiesList);
                 }
             });
 
@@ -475,6 +478,9 @@ function selectFile(contentType, multiple){
 
             computeButton.addEventListener('click', function() {
                 // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
+                let data = sendPost('/optimize/',loadedActivities);
+                showCalendar(data,answer);
+                
             });
 
             visualizeButton.addEventListener('click', function() {
