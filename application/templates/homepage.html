@@ -22,6 +22,7 @@
         <div id = 'loadedCalendar'>Atividades carregadas aparecerão aqui!</div>
         <p></p>
         <p></p>
+        <p>Escolha ótima:</p>
         <div id = 'answer'>Escolha ótima aparecerá aqui </div>
 
         <script>
@@ -291,10 +292,11 @@ if (typeof module !== 'undefined') {
 
             const activitiesList = document.getElementById('loadedCalendar');
             const answer = document.getElementById('answer');
-            var loadedActivities;
+            var loadedActivities = {'name': '', 'password': '', 'activities': []};
 
             async function showCalendar(activities, element) {
                 var ul = document.createElement('ul');
+                console.log(activities);
                 for(var i = 0; i < activities.length; i++) {
                     var act = activities[i];
 
@@ -343,7 +345,7 @@ if (typeof module !== 'undefined') {
                     liScheds.appendChild(texScheds);
                     var ulScheds = document.createElement('ul');
                     for(var j = 0; j < act.schedules.length; j++) {
-                        var schedul = act.schedules[j];
+                        var schedul = act.schedules[j].intervals;
                         var liSched = document.createElement('li');
                         var texSched = document.createTextNode('Alocação número '+(j+1).toString()+':\n');
                         liSched.appendChild(texSched);
@@ -352,7 +354,7 @@ if (typeof module !== 'undefined') {
                         for(var k = 0; k < schedul.length; k++) {
                             var interv = schedul[k];
                             var liInterv = document.createElement('li');
-                            var texInterv = document.createTextNode('Começo = '+interv[0]+', Fim = '+interv[1]);
+                            var texInterv = document.createTextNode('Começo = '+interv.start+', Fim = '+interv.end);
                             liInterv.appendChild(texInterv);
                             ulSched.appendChild(liInterv);
                         }
@@ -372,7 +374,12 @@ if (typeof module !== 'undefined') {
             }
 
             window.onload = function() {
-                if(!getCookie('user')) {
+                var usr = getCookie('user');
+                var pwd = getCookie('password');
+                if(usr && pwd) {
+                    loadedActivities.user = usr;
+                    loadedActivities.password = pwd;
+                } else {
                     location.href = '/';
                 }
             };
@@ -432,7 +439,7 @@ function selectFile(contentType, multiple){
                     var activities = JSON.parse(data);
                     cleanScreen();
                     loadedActivities = activities;
-                    showCalendar(activities,activitiesList);
+                    showCalendar(activities.activities,activitiesList);
                 }
                 fr.readAsText(fil);
             });
@@ -440,7 +447,7 @@ function selectFile(contentType, multiple){
             exportFileButton.addEventListener('click', function() {
                 if(loadedActivities) {
                     // Criar arquivo JSON com os dados
-                    var json = JSON.stringify(loadedActivities);
+                    var json = JSON.stringify({'activities':loadedActivities.activities});
                     var blob = new Blob([json], {type:"application/json;charset=utf-8"});
                     // Fazer download do arquivo
                     saveAs(blob, "calendario.json");
@@ -465,12 +472,12 @@ function selectFile(contentType, multiple){
                 }
                 if(conf) {
                     // Baixar do banco de dados as atividades
-                    let calend = sendGet('/homepage/getCalendar/');
+                    let calend = sendPost('/homepage/getCalendar/', loadedActivities);
                     // Mostrar as atividades
-                    var activities = (await calend).acts;
+                    var activities = (await calend).activities;
                     cleanScreen();
                     loadedActivities = activities;
-                    showCalendar(activities,activitiesList);
+                    showCalendar(activities.activities,activitiesList);
                 }
             });
 
@@ -478,8 +485,8 @@ function selectFile(contentType, multiple){
                 // Só envia a versão nova das atividades que foram modificados pro banco de dados
                 if(loadedActivities) {
                     if(confirm("Os dados no sistema serão sobrescritos pelos da sua tela. Deseja continuar?")) {
-                        sendDelete('/homepage/deleteCalendar/')
-                        sendPost('/homepage/saveCalendar/',loadedActivities);
+                        //sendDelete('/homepage/deleteCalendar/')
+                        sendPost('/homepage/saveCalendar/', loadedActivities);
                     }
                 } else {
                     alert("Nada a enviar");
@@ -490,7 +497,7 @@ function selectFile(contentType, multiple){
                 // Abre aviso de que vai apagar todas as atividades
                 if(confirm("Os dados no sistema E na sua tela serão permanentemente deletados! Deseja continuar?")) {
                     // Apaga todas atividades no BD e na tela
-                    sendDelete('/homepage/deleteCalendar/')
+                    sendPost('/homepage/deleteCalendar/', loadedActivities);
                     cleanScreen();
                 }
             });
@@ -499,7 +506,7 @@ function selectFile(contentType, multiple){
                 if(loadedActivities) {
                     // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
                     let promis = sendPost('/homepage/optimizeCalendar/', loadedActivities);
-                    showCalendar((await promis).acts,answer)
+                    showCalendar((await promis).activities,answer)
                 } else {
                     alert("Nada a enviar");
                 }
@@ -511,7 +518,6 @@ function selectFile(contentType, multiple){
                 // Carregar visualização em formato de calendário com eventos nos horários
                 // Talvez nem precise desse botão e possa carregar automaticamente.
                 // Talvez esse botão troque entre a visualização como lista e a visualização como calendário
-                // teste
             });
 
             cleanButton.addEventListener('click', function() {
