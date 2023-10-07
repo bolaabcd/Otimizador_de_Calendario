@@ -7,6 +7,6 @@ from typing import List, Tuple
 class IGetCalendarService(ABC):
 
     @abstractmethod
-    def getCalendar(self) -> List[dict]:
+    def getCalendar(self, user: User) -> List[dict]:
         pass
     

@@ -19,6 +19,7 @@ class AuthUserController(IAuthUserController):
         user = parseUser(data)
         if user is None:
             return HttpResponseBadRequest()
+
         result = self.__service.authUser(user)
         data = {'auth': result}
         return self.__requests.sendData(data)

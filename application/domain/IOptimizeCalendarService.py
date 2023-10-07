@@ -6,6 +6,6 @@ from typing import List, Optional
 class IOptimizeCalendarService(ABC):
 
     @abstractmethod
-    def optimizeCalendar(self, calendar: List[Activity]) -> Optional[List[Activity]]:
+    def optimizeCalendar(self, calendar: List[Activity], user: User) -> Optional[List[Activity]]:
         pass
     

@@ -97,7 +97,8 @@ class ConcreteSolver(Solver):
         for i, actAns in enumerate(actsAns):
             act = {}
             if actAns['selected'] == 1:
-                act['schedules'] = [timesList[actAns['timID']]]
+                tims = timesList[actAns['timID']]
+                act['schedules'] = [{'intervals':[{'start': t[0], 'end': t[1]} for t in tims]}]
                 act['locations'] = [placesList[actAns['placID']]]
                 act['people'] = [peopleList[actAns['persID']]]
                 act['value'] = activityList[i][3]

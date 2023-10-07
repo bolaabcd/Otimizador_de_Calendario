@@ -6,6 +6,6 @@ from typing import List
 class ISaveCalendarService(ABC):
 
     @abstractmethod
-    def saveCalendar(self, calendar: List[Activity]) -> bool:
+    def saveCalendar(self, calendar: List[Activity], user: User) -> bool:
         pass
     

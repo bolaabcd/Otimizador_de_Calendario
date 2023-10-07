@@ -15,7 +15,8 @@
         <button id = 'update'>Salvar atividades no sistema</button>
         <button id = 'compute'>Computar escolha ótima</button>
         <!-- TODO: Talvez queiramos mostrar como um calendario mesmo, estilo google calendar, e talvez nem precise de botão pra isso -->
-        <button id = 'visualize'>Visualizar calendário</button>
+        <button id = 'visualize'>Visualizar calendário (pode ignorar esse)</button>
+        <button id = 'goBack'> Voltar para página de login</button>
         <button id = 'clean'> Limpar atividades na tela</button>
 
         <p></p>
@@ -271,32 +272,12 @@ if (typeof module !== 'undefined') {
                 });
             }
 
-            function sendDelete(url) {
-                const csrftoken = getCookie('csrftoken');
-                return (fetch(url, {
-                    method : 'DELETE', 
-                    headers: {
-                        'X-CSRFToken': csrftoken
-                    },
-                    }))
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('ERROR');
-                        }
-                        return response.json();
-                    })
-                    .catch(error => {
-                        console.log('ERROR');
-                    });
-            }
-
             const activitiesList = document.getElementById('loadedCalendar');
             const answer = document.getElementById('answer');
-            var loadedActivities = {'name': '', 'password': '', 'activities': []};
+            var loadedActivities = {'name': null, 'password': null, 'activities': null};
 
             async function showCalendar(activities, element) {
                 var ul = document.createElement('ul');
-                console.log(activities);
                 for(var i = 0; i < activities.length; i++) {
                     var act = activities[i];
 
@@ -376,18 +357,24 @@ if (typeof module !== 'undefined') {
             window.onload = function() {
                 var usr = getCookie('user');
                 var pwd = getCookie('password');
-                if(usr && pwd) {
-                    loadedActivities.user = usr;
-                    loadedActivities.password = pwd;
+                if (usr && pwd) {
+                    const respons = sendPost('/authUser/', {name: usr, password: pwd}).then(response => {
+                            if(response.auth) {
+                                loadedActivities.name = usr;
+                                loadedActivities.password = pwd;
+                            } else {
+                                location.href = '/';
+                            }
+                        });
                 } else {
                     location.href = '/';
                 }
             };
 
             function cleanScreen() {
-                    activitiesList.innerHTML = 'Atividades carregadas aparecerão aqui!';
-                    loadedActivities = null;
-                    answer.innerHTML = 'Escolha ótima aparecerá aqui '
+                activitiesList.innerHTML = 'Atividades carregadas aparecerão aqui!';
+                loadedActivities.activities = null;
+                answer.innerHTML = 'Escolha ótima aparecerá aqui '
             }
 
 
@@ -436,16 +423,16 @@ function selectFile(contentType, multiple){
                 var fr = new FileReader();
                 fr.onload = function (e) {
                     var data = fr.result;
-                    var activities = JSON.parse(data);
+                    var activities = JSON.parse(data).activities;
                     cleanScreen();
-                    loadedActivities = activities;
-                    showCalendar(activities.activities,activitiesList);
+                    loadedActivities.activities = activities;
+                    showCalendar(activities,activitiesList);
                 }
                 fr.readAsText(fil);
             });
 
             exportFileButton.addEventListener('click', function() {
-                if(loadedActivities) {
+                if(loadedActivities.activities) {
                     // Criar arquivo JSON com os dados
                     var json = JSON.stringify({'activities':loadedActivities.activities});
                     var blob = new Blob([json], {type:"application/json;charset=utf-8"});
@@ -465,7 +452,7 @@ function selectFile(contentType, multiple){
             readButton.addEventListener('click', async function() {
                 // Mandar um aviso de que vai sobrescrever oq tah na tela atualmente pelo que tá salvo no sistema
                 var conf;
-                if (loadedActivities) {
+                if (loadedActivities.activities) {
                     conf = confirm("Os dados na sua tela serão sobrescritos pelo que está salvo no sistema! Deseja continuar?");
                 } else {
                     conf = true;
@@ -474,18 +461,22 @@ function selectFile(contentType, multiple){
                     // Baixar do banco de dados as atividades
                     let calend = sendPost('/homepage/getCalendar/', loadedActivities);
                     // Mostrar as atividades
-                    var activities = (await calend).activities;
-                    cleanScreen();
-                    loadedActivities = activities;
-                    showCalendar(activities.activities,activitiesList);
+                    var resp = await calend;
+                    if(resp.activities.length) {
+                        var activities = resp.activities;
+                        cleanScreen();
+                        loadedActivities.activities = activities;
+                        showCalendar(activities,activitiesList);
+                    } else {
+                        alert("Não há nada salvo ainda!");
+                    }
                 }
             });
 
             updateButton.addEventListener('click', function() {
                 // Só envia a versão nova das atividades que foram modificados pro banco de dados
-                if(loadedActivities) {
+                if(loadedActivities.activities) {
                     if(confirm("Os dados no sistema serão sobrescritos pelos da sua tela. Deseja continuar?")) {
-                        //sendDelete('/homepage/deleteCalendar/')
                         sendPost('/homepage/saveCalendar/', loadedActivities);
                     }
                 } else {
@@ -503,10 +494,15 @@ function selectFile(contentType, multiple){
             });
 
             computeButton.addEventListener('click', async function() {
-                if(loadedActivities) {
+                if(loadedActivities.activities) {
                     // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
                     let promis = sendPost('/homepage/optimizeCalendar/', loadedActivities);
-                    showCalendar((await promis).activities,answer)
+                    var resp = await promis;
+                    if(resp.activities.length) {
+                        showCalendar(resp.activities,answer)
+                    } else {
+                        alert("Nennuma resposta recebida! (provavelmente o problema é grande demais)");
+                    }
                 } else {
                     alert("Nada a enviar");
                 }

@@ -15,6 +15,10 @@ class OptimizeCalendarController(IOptimizeCalendarController):
 
     def optimizeCalendar(self, request: HttpRequest) -> HttpResponse:
         data = self.__requests.getData(request)
+
+        user = parseUser(data)
+        if user is None:
+            return HttpResponseBadRequest()
         
         calendar = parseCalendar(data)
 
@@ -22,6 +26,6 @@ class OptimizeCalendarController(IOptimizeCalendarController):
             return HttpResponseBadRequest()
         
         result = self.__service.optimizeCalendar(calendar)
-        
-        return self.__requests.sendData({'acts':result})
+        data = {'activities': result}
+        return self.__requests.sendData(data)
     

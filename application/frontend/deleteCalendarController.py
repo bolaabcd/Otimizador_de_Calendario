@@ -12,11 +12,14 @@ class DeleteCalendarController(IDeleteCalendarController):
         self.__service = service
 
     def deleteCalendar(self, request: HttpRequest) -> HttpResponse:
-        if request.method == 'DELETE':
-            result = self.__service.deleteCalendar()
-            data = {'delete': result}
-            return self.__requests.sendData(data)
-        else:
-            return HttpResponseNotAllowed(['DELETE'])
-        
-    
+        data = self.__requests.getData(request)
+        if type(data) is not dict:
+            return data
+
+        user = parseUser(data)
+        if user is None:
+            return HttpResponseBadRequest()
+        result = self.__service.deleteCalendar(user)
+        data = {'delete': result}
+        return self.__requests.sendData(data)
+

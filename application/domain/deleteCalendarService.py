@@ -10,8 +10,6 @@ class DeleteCalendarService(IDeleteCalendarService):
         self.__storage = storage
         self.__auth = auth
 
-    def deleteCalendar(self) -> bool:
-        
-        return self.__storage.deleteCalendar()
-    
+    def deleteCalendar(self, user:User) -> bool:
+        return self.__storage.deleteCalendar(user)
     

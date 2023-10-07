@@ -15,12 +15,16 @@ class SaveCalendarController(ISaveCalendarController):
 
     def saveCalendar(self, request: HttpRequest) -> HttpResponse:
         data = self.__requests.getData(request)
+
+        user = parseUser(data)
+        if user is None:
+            return HttpResponseBadRequest()
         
         calendar = parseCalendar(data)
         if calendar is None:
             return HttpResponseBadRequest()
             
-        result = self.__service.saveCalendar(calendar)
+        result = self.__service.saveCalendar(calendar, user)
         data = {'save': result}
         return self.__requests.sendData(data)
     

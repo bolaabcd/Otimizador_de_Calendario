@@ -6,6 +6,6 @@ from .domainTypes import User
 class IDeleteCalendarService(ABC):
 
     @abstractmethod
-    def deleteCalendar(self) -> bool:
+    def deleteCalendar(self, user: User) -> bool:
         pass
     

@@ -12,8 +12,7 @@ class SaveCalendarService(ISaveCalendarService):
         self.__storage = storage
         self.__auth = auth
 
-    def saveCalendar(self, calendar: List[Activity]) -> bool:
-
-        result = self.__storage.saveCalendar(calendar)
+    def saveCalendar(self, calendar: List[Activity], user: User) -> bool:
+        result = self.__storage.saveCalendar(calendar, user)
         return result
     

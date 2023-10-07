@@ -86,12 +86,12 @@
                 let userName = nickInput.value;
                 let userPwd = passwdInput.value;
                 // tmp
-                userName = userName.replace(';','SEMICOLN5WNKVjhLxT');
-                userName = userName.replace('=','EQUALSO2vqGHimqN');
-                userName = userName.replace('\\','BACKSLASHhTwudhrjLN');
-                userPwd  = userPwd.replace(';','SEMICOLN7IYWaNsj2M');
-                userPwd  = userPwd.replace('=','EQUALS1O8OXS2Ka8');
-                userPwd  = userPwd.replace('\\','BACKSLASHeWvl59Sq1c');
+                userName = userName.replaceAll(';','SEMICOLN5WNKVjhLxT');
+                userName = userName.replaceAll('=','EQUALSO2vqGHimqN');
+                userName = userName.replaceAll('\\','BACKSLASHhTwudhrjLN');
+                userPwd  = userPwd.replaceAll(';','SEMICOLN7IYWaNsj2M');
+                userPwd  = userPwd.replaceAll('=','EQUALS1O8OXS2Ka8');
+                userPwd  = userPwd.replaceAll('\\','BACKSLASHeWvl59Sq1c');
                 
                 return [userName,userPwd];
             }
@@ -114,7 +114,7 @@
 
             loginUser.addEventListener('click', async function() {
                 var namePwd = getUserData();
-                const response = await sendPost('authUser/', {name: namePwd[0], password: namePwd[1]});
+                const response = await sendPost('/authUser/', {name: namePwd[0], password: namePwd[1]});
                 if(response.auth) {
                     setCookie('user',namePwd[0]);
                     setCookie('password',namePwd[1]);

@@ -11,8 +11,8 @@ class GetCalendarService(IGetCalendarService):
         self.__storage = storage
         self.__auth = auth
 
-    def getCalendar(self) -> List[dict]:
-        result = self.__storage.loadCalendar()
+    def getCalendar(self, user: User) -> List[dict]:
+        result = self.__storage.loadCalendar(user)
         if result is None:
             return []
         

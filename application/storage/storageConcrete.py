@@ -19,8 +19,9 @@ class ConcreteStorage(Storage):
         else:
             return user[0]
 
-    def loadCalendar(self) -> Optional[List[dict]]:
-        dbres = ActivityDB.objects.all()
+    def loadCalendar(self, user: User) -> Optional[List[dict]]:
+        usDB = self.findUser(user.name)
+        dbres = ActivityDB.objects.filter(user = usDB)
         ans = []
         for v in dbres:
             ans.append(v.toDict())
@@ -29,10 +30,13 @@ class ConcreteStorage(Storage):
     def saveCalendar(
         self,
         activities: List[Activity],
+        user: User
     ) -> bool:
+        self.deleteCalendar(user)
+        usDB = self.findUser(user.name)
         acts = []
         for activ in activities:
-            actDB = ActivityDB(value = activ.value)
+            actDB = ActivityDB(value = activ.value, user = usDB)
             actDB.save()
             for locStr in activ.locations:
                 locDB = LocationDB(name = locStr, activity = actDB)
@@ -50,6 +54,7 @@ class ConcreteStorage(Storage):
                     intervDB.save()
         return True
 
-    def deleteCalendar(self) -> bool:
-        ActivityDB.objects.all().delete()
+    def deleteCalendar(self, user: User) -> bool:
+        usDB = self.findUser(user.name)
+        ActivityDB.objects.filter(user = usDB).delete()
         return True
