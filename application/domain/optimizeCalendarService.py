@@ -12,10 +12,7 @@ class OptimizeCalendarService(IOptimizeCalendarService):
         self.__auth = auth
         self.__solver = solver
         
-    def optimizeCalendar(self, user: User, calendar: List[Activity]) -> Optional[List[Activity]]:
-        if not self.__auth.authUser(user):
-            return None
-        
+    def optimizeCalendar(self, calendar: List[Activity]) -> Optional[List[Activity]]:
         optimized = self.__solver.solve(calendar)
         return optimized
     

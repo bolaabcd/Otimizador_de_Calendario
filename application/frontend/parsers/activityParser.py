@@ -13,25 +13,20 @@ def parseActivity(data: dict) -> Optional[Activity]:
             if schedule is None:
                 return None
             schedules.append(schedule)
-        
         locations = data['locations']
-        if len(schedules) != len(locations):
-            return None
         
         for location in locations:
             if type(location) is not str:
                 return None
 
         people = data['people']
-        if len(schedules) != len(people):
-            return None
         
         for person in people:
             if type(person) is not str:
                 return None
         
         value = data['value']
-        if type(value) is not float:
+        if (type(value) is not float) and (type(value) is not int):
             return None
 
         return Activity(schedules, locations, people, value)

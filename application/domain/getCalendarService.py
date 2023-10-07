@@ -11,13 +11,10 @@ class GetCalendarService(IGetCalendarService):
         self.__storage = storage
         self.__auth = auth
 
-    def getCalendar(self, user: User) -> Tuple[List[Activity], List[Activity]]:
-        if not self.__auth.authUser(user):
-            return False
-        
-        result = self.__storage.loadCalendar(user)
+    def getCalendar(self) -> List[dict]:
+        result = self.__storage.loadCalendar()
         if result is None:
-            return ([], [])
+            return []
         
         return result    
     

@@ -6,11 +6,10 @@ from .intervalParser import parseInterval
 
 def parseSchedule(data: dict) -> Optional[Schedule]:
     try:
-        scheduleDict = data['intervals']
         intervals = []
 
-        for intervalDict in scheduleDict:
-            interval = parseInterval(intervalDict)
+        for intervalPair in data:
+            interval = parseInterval(intervalPair)
             if interval is None:
                 return None
             intervals.append(interval)

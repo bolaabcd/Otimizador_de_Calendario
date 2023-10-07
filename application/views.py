@@ -19,8 +19,8 @@ from .domain.optimizeCalendarService import OptimizeCalendarService
 from .domain.saveCalendarService import SaveCalendarService
 
 from .frontend.JSONrequest import JSONRequest
-from .solver.solver import ConcreteSolver
-
+from .solver.concreteSolver import ConcreteSolver
+from .storage.storageConcrete import ConcreteStorage
 
 def homepage(request: HttpRequest) -> HttpResponse:
     return Pages().getHomePage(request)
@@ -30,7 +30,7 @@ def authPage(request: HttpRequest) -> HttpResponse:
 
 
 requestsParser = JSONRequest()
-storage = None # TODO
+storage = ConcreteStorage()
 authService = AuthUserService(storage)
 solver = ConcreteSolver()
 
@@ -64,4 +64,3 @@ def deleteCalendar(request: HttpRequest) -> HttpResponse:
     deleteCalendarService = DeleteCalendarService(storage, authService)
     deleteCalendarController = DeleteCalendarController(requestsParser, deleteCalendarService)
     return deleteCalendarController.deleteCalendar(request)
-

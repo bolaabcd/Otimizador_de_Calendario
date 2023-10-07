@@ -12,10 +12,8 @@ class SaveCalendarService(ISaveCalendarService):
         self.__storage = storage
         self.__auth = auth
 
-    def saveCalendar(self, user: User, unoptimizedCalendar: List[Activity], optimizedCalendar: List[Activity]) -> bool:
-        if not self.__auth.authUser(user):
-            return None
+    def saveCalendar(self, calendar: List[Activity]) -> bool:
 
-        result = self.__storage.saveCalendar(user, unoptimizedCalendar, optimizedCalendar)
+        result = self.__storage.saveCalendar(calendar)
         return result
     

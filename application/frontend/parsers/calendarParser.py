@@ -4,15 +4,14 @@ from ...domain.domainTypes import Activity
 from .activityParser import parseActivity
 
 
-def parseCalendar(data: dict) -> Optional[List[Activity]]:
+def parseCalendar(data: List[dict]) -> Optional[List[Activity]]:
     try:
         activities = []
-
-        for activityDict in data['activities']:
+        for activityDict in data:
             activity = parseActivity(activityDict)
             if activity is None:
                 return None
-            activities.append(activities)
+            activities.append(activity)
         
         return activities
 
