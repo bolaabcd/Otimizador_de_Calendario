@@ -4,8 +4,13 @@ import json
 
 # Create your models here.
 
+class UserDB(models.Model):
+    name = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
+
 class ActivityDB(models.Model):
     value = models.IntegerField()
+    user = models.ForeignKey(UserDB, on_delete = models.CASCADE)
     
     def toDict(self):
         dic = {'value': self.value};

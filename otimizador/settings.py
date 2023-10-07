@@ -36,8 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'helloworld',
-    'crud',
     'application'
 ]
 
@@ -51,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'otimizador.urls'
+ROOT_URLCONF = 'application.urls'
 
 TEMPLATES = [
     {
