@@ -377,6 +377,7 @@ if (typeof module !== 'undefined') {
                     answer.innerHTML = 'Escolha ótima aparecerá aqui '
             }
 
+
             const importFileButton = document.getElementById('importFile');
             const exportFileButton = document.getElementById('exportFile');
             const createButton = document.getElementById('create');
@@ -458,7 +459,7 @@ function selectFile(contentType, multiple){
                 }
                 if(conf) {
                     // Baixar do banco de dados as atividades
-                    let calend = sendGet('/getCalendar');
+                    let calend = sendGet('/homepage/getCalendar/');
                     // Mostrar as atividades
                     var activities = (await calend).acts;
                     cleanScreen();
@@ -471,8 +472,8 @@ function selectFile(contentType, multiple){
                 // Só envia a versão nova das atividades que foram modificados pro banco de dados
                 if(loadedActivities) {
                     if(confirm("Os dados no sistema serão sobrescritos pelos da sua tela. Deseja continuar?")) {
-                        sendDelete('/deleteCalendar/')
-                        sendPost('/saveCalendar/',loadedActivities);
+                        sendDelete('/homepage/deleteCalendar/')
+                        sendPost('/homepage/saveCalendar/',loadedActivities);
                     }
                 } else {
                     alert("Nada a enviar");
@@ -483,7 +484,7 @@ function selectFile(contentType, multiple){
                 // Abre aviso de que vai apagar todas as atividades
                 if(confirm("Os dados no sistema E na sua tela serão permanentemente deletados! Deseja continuar?")) {
                     // Apaga todas atividades no BD e na tela
-                    sendDelete('/deleteCalendar/')
+                    sendDelete('/homepage/deleteCalendar/')
                     cleanScreen();
                 }
             });
@@ -491,7 +492,7 @@ function selectFile(contentType, multiple){
             computeButton.addEventListener('click', async function() {
                 if(loadedActivities) {
                     // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
-                    let promis = sendPost('/optimize/', loadedActivities);
+                    let promis = sendPost('/homepage/optimizeCalendar/', loadedActivities);
                     showCalendar((await promis).acts,answer)
                 } else {
                     alert("Nada a enviar");

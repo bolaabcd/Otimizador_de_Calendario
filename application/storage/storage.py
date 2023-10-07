@@ -15,17 +15,16 @@ class Storage(ABC):
         pass
 
     @abstractmethod
-    def loadCalendar(self, user: User) -> Optional[Tuple[
-        List[Activity],
-        List[Activity]
-    ]]:
+    def loadCalendar(self) -> Optional[List[Activity]]:
         pass
 
     @abstractmethod
     def saveCalendar(
         self,
-        user: User,
-        queryActivities: list[Activity],
-        optimizedActivities: list[Activity]
+        activities: List[Activity],
     ) -> bool:
+        pass
+
+    @abstractmethod
+    def deleteCalendar(self) -> bool:
         pass
