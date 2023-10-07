@@ -6,7 +6,8 @@ urlpatterns = [
     path('homepage/', view=views.homepage),
     path('createUser/', view=views.createUser),
     path('authUser/', view=views.authUser),
-    path('saveCalendar/', view=views.saveCalendar),
-    path('getCalendar/', view=views.getCalendar),
-    path('optimize/', view=views.optimizeCalendar),
+    path('homepage/saveCalendar/', view=views.saveCalendar),
+    path('homepage/getCalendar/', view=views.getCalendar),
+    path('homepage/optimizeCalendar/', view=views.optimizeCalendar),
+    path('homepage/deleteCalendar/', view=views.deleteCalendar)
 ]

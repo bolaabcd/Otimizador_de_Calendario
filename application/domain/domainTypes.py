@@ -8,6 +8,7 @@ class User:
         self.name = name
         self.password = password
 
+# Formato das datas: '%Y-%m-%d %H:%M:%S'
 class Interval:
     def __init__(self, start: datetime, end: datetime):
         self.start = start

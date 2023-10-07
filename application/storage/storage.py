@@ -29,3 +29,7 @@ class Storage(ABC):
         optimizedActivities: List[Activity]
     ) -> bool:
         pass
+
+    @abstractmethod
+    def deleteCalendar(self, user: User) -> bool:
+        pass

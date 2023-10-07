@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang='pt-br'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Otimizador de calendário</title>
+    </head>
+    <body>
+        <button id = 'create-user'>Cadastrar usuário</button>
+        <button id = 'login-user'>Logar usuário</button>
+
+        <ul> <!-- TODO Fazer o form de cadastro e autenticação -->
+            <li>Nome Usuário</li>
+            <li>Senha</li>
+        </ul>
+
+
+        <script>
+            
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Verifica se o cookie começa com o nome desejado
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            async function sendPost(url, data) {
+                const csrftoken = getCookie('csrftoken');
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('ERROR');
+                    }
+
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const responseData = await response.json();
+                        // Faça algo com responseData aqui
+                        return responseData;
+                    } else {
+                        const responseText = await response.text();
+                        // Faça algo com responseText aqui
+                        return responseText;
+                    }
+                } catch (error) {
+                    // Lidar com erros aqui
+                    console.error('Erro:', error);
+                }
+            }
+            
+
+            const createUser = document.getElementById('create-user');
+            const loginUser = document.getElementById('login-user');
+            
+            createUser.addEventListener('click', function() {
+                // Só para testes
+                sendPost('createUser/', {name: "José", password: "Almeida"});
+            });
+
+            loginUser.addEventListener('click', async function() {
+                // Só para testes
+                const response = await sendPost('authUser/', {name: "José", password: "Almeida"});
+                console.log(response)
+            });
+
+        </script>
+    </body>
+</html>

@@ -14,7 +14,7 @@ class Solver(ABC):
 
 
 
-class concreteSolver(Solver):
+class ConcreteSolver(Solver):
     
     def solve(self, activities: List[Activity]) -> List[Activity]:
         # Converting to format that can be used by Integer Programming Solver:

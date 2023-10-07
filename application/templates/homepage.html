@@ -39,8 +39,57 @@
             }
 
             function showCalendar(activities) {
-                activit
+                // activit
             }
+
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Verifica se o cookie começa com o nome desejado
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            async function sendPost(url, data) {
+                const csrftoken = getCookie('csrftoken');
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('ERROR');
+                    }
+
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const responseData = await response.json();
+                        // Faça algo com responseData aqui
+                        return responseData;
+                    } else {
+                        const responseText = await response.text();
+                        // Faça algo com responseText aqui
+                        return responseText;
+                    }
+                } catch (error) {
+                    // Lidar com erros aqui
+                    console.error('Erro:', error);
+                }
+            }
+
 
             const importFileButton = document.getElementById('importFile');
             const exportFileButton = document.getElementById('exportFile');
@@ -70,7 +119,7 @@
                 // Mandar um aviso de que vai sobrescrever oq tah na tela atualmente pelo que tá salvo no sistema
                 if(confirm("Os dados na sua tela serão sobrescritos pelo que está salvo no banco de dados! Deseja continuar?")) {
                     // Baixar do banco de dados as atividades
-                    let calend = sendGet('/getCalendar');
+                    let calend = sendPost('getCalendar/', {name: 'José', password: 'Almeida'});
                     // Mostrar as atividades
                     showCalendar(calend);
                 }
@@ -78,15 +127,76 @@
 
             updateButton.addEventListener('click', function() {
                 // Só envia a versão nova das atividades que foram modificados pro banco de dados
+            
+                sendPost('saveCalendar/',
+                    {
+                        activities: [
+                            {
+                                schedules: [
+                                    {
+                                        intervals: [
+                                            {
+                                                start: '2023-10-02 23:47:00',
+                                                end:   '2023-10-03 00:00:00',
+                                            }
+                                        ]
+                                    }
+                                ],
+                                locations: [
+                                    'Belo Horizonte'
+                                ],
+                                people: [
+                                    'Marco Túlio'
+                                ],
+                                value: 123.31
+                            }
+                        ],
+                        name: 'José',
+                        password: 'Almeida'
+                    }
+                )
             });
 
             deleteButton.addEventListener('click', function() {
                 // Abre aviso de que vai apagar todas as atividades
                 // Apaga todas atividades no BD e na tela
+
+                sendPost('deleteCalendar/', {
+                    name: 'José',
+                    password: 'Almeida'}
+                );
             });
 
             computeButton.addEventListener('click', function() {
                 // Computa resposta e mostra atividades escolhidas, acho que abaixo das atividades normal serviria já
+            
+                sendPost('optimizeCalendar/',
+                    {
+                        activities: [
+                            {
+                                schedules: [
+                                    {
+                                        intervals: [
+                                            {
+                                                start: '2023-10-02 23:47:00',
+                                                end:   '2023-10-03 00:00:00',
+                                            }
+                                        ]
+                                    }
+                                ],
+                                locations: [
+                                    'Belo Horizonte'
+                                ],
+                                people: [
+                                    'Marco Túlio'
+                                ],
+                                value: 123.31
+                            }
+                        ],
+                        name: 'José',
+                        password: 'Almeida'
+                    }
+                )
             });
 
             visualizeButton.addEventListener('visualize', function() {
