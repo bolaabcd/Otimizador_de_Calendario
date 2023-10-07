@@ -371,6 +371,12 @@ if (typeof module !== 'undefined') {
                 element.appendChild(ul);
             }
 
+            window.onload = function() {
+                if(!getCookie('user')) {
+                    location.href = '/';
+                }
+            };
+
             function cleanScreen() {
                     activitiesList.innerHTML = 'Atividades carregadas aparecerão aqui!';
                     loadedActivities = null;
@@ -505,6 +511,7 @@ function selectFile(contentType, multiple){
                 // Carregar visualização em formato de calendário com eventos nos horários
                 // Talvez nem precise desse botão e possa carregar automaticamente.
                 // Talvez esse botão troque entre a visualização como lista e a visualização como calendário
+                // teste
             });
 
             cleanButton.addEventListener('click', function() {

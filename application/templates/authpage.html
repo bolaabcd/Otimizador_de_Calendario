@@ -9,11 +9,12 @@
         <button id = 'create-user'>Cadastrar usuário</button>
         <button id = 'login-user'>Logar usuário</button>
 
-        <ul> <!-- TODO Fazer o form de cadastro e autenticação -->
-            <li>Nome Usuário</li>
-            <li>Senha</li>
-        </ul>
-
+        <form>
+          <label for="nick">Nome de usuário:</label><br>
+          <input type="text" id="nick" name="nick" value=""><br>
+          <label for="passwd">Senha:</label><br>
+          <input type="password" id="passwd"  name="passwd" value=""><br><br>
+        </form> 
 
         <script>
             
@@ -31,6 +32,16 @@
                     }
                 }
                 return cookieValue;
+            }
+
+            function setCookie(name,value,days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days*24*60*60*1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "")  + expires + "; SameSite = Strict; path=/";
             }
 
             async function sendPost(url, data) {
@@ -68,16 +79,49 @@
 
             const createUser = document.getElementById('create-user');
             const loginUser = document.getElementById('login-user');
+            const nickInput = document.getElementById('nick');
+            const passwdInput = document.getElementById('passwd');
             
-            createUser.addEventListener('click', function() {
-                // Só para testes
-                sendPost('createUser/', {name: "José", password: "Almeida"});
+            function getUserData() {
+                let userName = nickInput.value;
+                let userPwd = passwdInput.value;
+                // tmp
+                userName = userName.replace(';','SEMICOLN5WNKVjhLxT');
+                userName = userName.replace('=','EQUALSO2vqGHimqN');
+                userName = userName.replace('\\','BACKSLASHhTwudhrjLN');
+                userPwd  = userPwd.replace(';','SEMICOLN7IYWaNsj2M');
+                userPwd  = userPwd.replace('=','EQUALS1O8OXS2Ka8');
+                userPwd  = userPwd.replace('\\','BACKSLASHeWvl59Sq1c');
+                
+                return [userName,userPwd];
+            }
+
+            createUser.addEventListener('click', async function() {
+                var namePwd = getUserData();
+                if(namePwd[0] && namePwd[1]) {
+                    const response = await sendPost('createUser/', {name: namePwd[0], password: namePwd[1]});
+                    if(response.create) {
+                        alert("Usuario criado com sucesso!");
+                        nickInput.value = '';
+                        passwdInput.value = '';
+                    } else {
+                        alert("Usuario já existe!");
+                    }
+                } else {
+                    alert("Nem usuario nem senha nao podem estar vazios!");
+                }
             });
 
             loginUser.addEventListener('click', async function() {
-                // Só para testes
-                const response = await sendPost('authUser/', {name: "José", password: "Almeida"});
-                console.log(response)
+                var namePwd = getUserData();
+                const response = await sendPost('authUser/', {name: namePwd[0], password: namePwd[1]});
+                if(response.auth) {
+                    setCookie('user',namePwd[0]);
+                    setCookie('password',namePwd[1]);
+                    location.href='/homepage/';
+                } else {
+                    alert("Usuário e/ou senha incorretos!");
+                }
             });
 
         </script>

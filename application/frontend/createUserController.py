@@ -20,7 +20,7 @@ class CreateUserController(ICreateUserController):
         if user is None:
             return HttpResponseBadRequest()
 
-        result = self.__service.createUser()
+        result = self.__service.createUser(user)
         data = {'create': result}
         return self.__requests.sendData(data)
 

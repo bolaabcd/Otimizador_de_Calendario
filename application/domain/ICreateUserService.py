@@ -6,6 +6,6 @@ from .domainTypes import User
 class ICreateUserService(ABC):
 
     @abstractmethod
-    def authUser(self, user: User) -> bool:
+    def createUser(self, user: User) -> bool:
         pass
     

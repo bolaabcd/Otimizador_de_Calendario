@@ -1,6 +1,3 @@
-
-
-
 from django.http import HttpRequest, HttpResponse
 
 from .frontend.pages import Pages
