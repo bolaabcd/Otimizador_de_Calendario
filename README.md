@@ -124,6 +124,11 @@ CREATE USER 'seu_usuario'@'localhost' IDENTIFIED BY 'sua_senha';
 GRANT ALL PRIVILEGES ON nome_do_seu_banco_de_dados.* TO 'seu_usuario'@'localhost';
 ```
 
+Pode ser necessário:
+```sql
+CREATE DATABASE nome_do_seu_banco_de_dados CHARACTER SET = utf8 COLLATE utf8_general_ci;
+```
+
 No caso para o exemplo de crud básico:
 ```python
 DATABASES = {
@@ -138,8 +143,31 @@ DATABASES = {
 }
 ```
 
+E para o database principal:
+```python
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'otimizador_db',
+        'USER': 'usuario',
+        'PASSWORD': 'engsoft@123',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    }
+```
+
 Assim é possível entrar no mysql com outro usuário:
 ```
 mysql -u teste -p
 ```
 Ao digitar a senha corretamente, é esperado que você tenha acesso ao terminal do mysql.
+
+
+Após serem feitas alterações relacionadas ao banco de dados:
+```
+python manage.py makemigrations
+python manage.py migrate
+```
