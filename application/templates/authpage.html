@@ -5,17 +5,20 @@
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Otimizador de calendário</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/authpage.css' %}">
     </head>
     <body>
-        <button id = 'create-user'>Cadastrar usuário</button>
-        <button id = 'login-user'>Logar usuário</button>
-
-        <form>
-          <label for="nick">Nome de usuário:</label><br>
-          <input type="text" id="nick" name="nick" value=""><br>
-          <label for="passwd">Senha:</label><br>
-          <input type="password" id="passwd"  name="passwd" value=""><br><br>
-        </form> 
+        <div class="container">
+            <div class="form-container">
+                <label for="nick">Nome de usuário:</label><br>
+                <input type="text" id="nick" name="nick" value="" class="text-input"><br>
+                <label for="passwd">Senha:</label><br>
+                <input type="password" id="passwd"  name="passwd" value="" class="text-input"><br><br>
+                
+                <button id = 'create-user'>Cadastrar usuário</button>
+                <button id = 'login-user'>Logar usuário</button>
+            </div>
+        </div>
 
         <script src="{% static 'js/authpage.js' %}"></script>
     </body>

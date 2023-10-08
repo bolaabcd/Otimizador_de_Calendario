@@ -1,0 +1,66 @@
+
+html {
+    font-family: sans-serif;
+}
+
+/* Style for buttons */
+button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* Style for the form container */
+form {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* Style for labels */
+label {
+    font-weight: bold;
+}
+
+/* Style for text inputs */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Style for the form submit button */
+input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* Hover effect for buttons and submit button */
+button:hover,
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Center the form within its container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh
+}
+
+.form-container {
+    margin: 20px;
+    max-width: 300px;
+}
+
