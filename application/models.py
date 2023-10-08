@@ -5,8 +5,8 @@ import json
 # Create your models here.
 
 class UserDB(models.Model):
-    name = models.CharField(max_length=255, unique = True)
-    password = models.CharField(max_length=255)
+    name = models.CharField(max_length=1000, unique = True)
+    password = models.CharField(max_length=1000)
 
 class ActivityDB(models.Model):
     value = models.IntegerField()
