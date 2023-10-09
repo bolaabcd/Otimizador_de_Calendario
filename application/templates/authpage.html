@@ -10,6 +10,7 @@
     <body>
         <div class="container">
             <div class="form-container">
+                {% csrf_token %}
                 <label for="nick">Nome de usuário:</label><br>
                 <input type="text" id="nick" name="nick" value="" class="text-input"><br>
                 <label for="passwd">Senha:</label><br>
