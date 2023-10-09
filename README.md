@@ -171,3 +171,4 @@ Após serem feitas alterações relacionadas ao banco de dados:
 python manage.py makemigrations
 python manage.py migrate
 ```
+teste de commit
