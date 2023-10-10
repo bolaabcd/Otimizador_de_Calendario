@@ -808,7 +808,7 @@ exportFileButton.addEventListener('click', function() {
 readButton.addEventListener('click', async function() {
     // Mandar um aviso de que vai sobrescrever oq tah na tela atualmente pelo que tá salvo no sistema
     var conf;
-    if (loadedActivities.activities) {
+    if (loadedActivities.activities.length != 0) {
         conf = confirm("Os dados na sua tela serão sobrescritos pelo que está salvo no sistema! Deseja continuar?");
     } else {
         conf = true;
@@ -843,13 +843,13 @@ updateButton.addEventListener('click', function() {
 
 deleteButton.addEventListener('click', function() {
     // Abre aviso de que vai apagar todas as atividades
-    if(confirm("Os dados no sistema E na sua tela serão permanentemente deletados! Deseja continuar?")) {
+    /*if(confirm("Os dados no sistema E na sua tela serão permanentemente deletados! Deseja continuar?")) {
         // Apaga todas atividades no BD e na tela
         sendPost('/homepage/deleteCalendar/', loadedActivities);
         resetActivitySelection();
         unoptimizedCalendar.update([]);
         optimizedCalendar.update([]);
-    }
+    }*/
 });
 
 computeButton.addEventListener('click', async function() {
@@ -873,6 +873,10 @@ cleanButton.addEventListener('click', function() {
     // Limpar dados que estão sendo apresentados
     if(confirm("Os dados apresentados serão apagados da sua tela! Deseja continuar?")) {
         resetActivitySelection();
+        unoptimizedCalendar.update([]);
+        optimizedCalendar.update([]);
+		showCalendar([],answer,[]);
+		showCalendar([],activitiesList,[]);
         loadedActivities.activities = [];
     }
 });
