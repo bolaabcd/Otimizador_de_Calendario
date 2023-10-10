@@ -324,8 +324,8 @@ function IntervalComponent(identifier) {
 
     function getJs() {
         return {
-            start: getStart(),
-            end: getEnd()
+            start: getStart().replace('Z',''),
+            end: getEnd().replace('Z','')
         };
     }
 
@@ -700,7 +700,7 @@ function showCalendar(activities, element, colors) {
             for(var k = 0; k < schedul.length; k++) {
                 var interv = schedul[k];
                 var liInterv = document.createElement('li');
-                var texInterv = document.createTextNode('Começo = '+interv.start.replace('T',' ')+', Fim = '+interv.end.replace('T',' '));
+                var texInterv = document.createTextNode('Começo = '+interv.start.replace('T',' ').replace('Z','')+', Fim = '+interv.end.replace('T',' ').replace('Z',''));
                 liInterv.appendChild(texInterv);
                 ulSched.appendChild(liInterv);
             }
