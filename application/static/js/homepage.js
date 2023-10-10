@@ -1,4 +1,3 @@
-
 /*--------------------------------------------------------------------------------------------------------------- */
 /*
 The MIT License
@@ -38,7 +37,7 @@ function bom (blob, opts) {
 
   // prepend BOM for UTF-8 XML and text/* types (including HTML)
   // note: your browser will automatically convert UTF-16 U+FEFF to EF BB BF
-  if (opts.autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) {
+  if (opts.autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.charset\s=\s*utf-8/i.test(blob.type)) {
     return new Blob([String.fromCharCode(0xFEFF), blob], { type: blob.type })
   }
   return blob
@@ -243,18 +242,413 @@ async function sendPost(url, data) {
     });
 }
 
+
+function createHtmlStr(type, keys, inner) {
+    let htmlBuilder = [];
+
+    htmlBuilder.push("<");
+    htmlBuilder.push(type);
+    
+    for(var key in keys) {
+        htmlBuilder.push(" ");
+        htmlBuilder.push(key);
+        htmlBuilder.push("=\"");
+        htmlBuilder.push(keys[key]);
+        htmlBuilder.push("\" ");
+    }
+    for(let i = 0; i < keys.length; i++) {
+        
+    }
+
+    htmlBuilder.push("\">");
+    htmlBuilder.push(inner);
+    htmlBuilder.push("</");
+    htmlBuilder.push(type);
+    htmlBuilder.push(">");
+
+    return htmlBuilder.join("");
+}
+
+function createDivStr(id, htmlClass, inner) {
+    return createHtmlStr("div", {id: id, class: htmlClass}, inner);
+}
+
+function createButtonStr(id, htmlClass, inner) {
+    return createHtmlStr("button", {id: id, class: htmlClass}, inner);
+}
+
+function createInputStr(id, type, htmlClass) {
+    return createHtmlStr("input", {id: id, class: htmlClass, type: type}, "");
+}
+
+
+
+function IntervalComponent(identifier) {
+
+    const id = identifier;
+    
+    function getStartId() {
+        return id + "#start";
+    }
+
+    function getEndId() {
+        return id + "#end";
+    }
+
+    function getStart() {
+        const element = document.getElementById(getStartId());
+        return element.value;
+    }
+
+    function getEnd() {
+        const element = document.getElementById(getEndId());
+        return element.value;
+    }
+    
+
+    function getHtml() {
+        let htmlBuilder = [];
+
+        htmlBuilder.push("<div class=\"interval\"><p>");
+
+        htmlBuilder.push("Início: ");
+        htmlBuilder.push(createInputStr(getStartId(), "datetime-local", "date-input"));
+    
+        htmlBuilder.push(" Fim: ");
+        htmlBuilder.push(createInputStr(getEndId(), "datetime-local", "date-input"));
+
+        htmlBuilder.push("</div>");
+
+        return htmlBuilder.join("");
+    }
+
+    function getJs() {
+        return {
+            start: getStart(),
+            end: getEnd()
+        };
+    }
+
+    return {
+        getHtml: getHtml,
+        getJs: getJs
+    }
+}
+
+function ScheduleComponent(identifier) {
+
+    const id = identifier;
+
+    let intervals = [];
+
+    function addInterval() {
+        intervals.push(IntervalComponent(id + "#interval" + intervals.length));
+
+        let el = document.getElementById(id);
+        el.innerHTML += intervals[intervals.length - 1].getHtml();
+    }
+
+    function setListeners() {
+        const addButtonId = id + "#add";
+        document.getElementById(addButtonId).addEventListener('click', addInterval);
+    }
+
+    function getHtml(el) {
+        let htmlBuilder = [];
+
+        const addButtonId = id + "#add";
+
+        htmlBuilder.push("<div class=\"scheduleOut\">");
+        htmlBuilder.push("<div class=\"scheduleIn\"");
+        htmlBuilder.push("id=\"");
+        htmlBuilder.push(id);
+        htmlBuilder.push("\">");
+        htmlBuilder.push("</div>");
+        htmlBuilder.push(createButtonStr(addButtonId, "activity-button", "Adicionar Intervalo"));
+        htmlBuilder.push("</div>");
+
+        return htmlBuilder.join("");
+    }
+
+    function getJs() {
+
+        let intervalsJs = [];
+        for(let i = 0; i < intervals.length; i++) {
+            intervalsJs.push(intervals[i].getJs());
+        }
+
+        return {
+            intervals: intervalsJs
+        };
+    }
+
+    return {
+        getHtml: getHtml,
+        getJs: getJs,
+        addInterval: addInterval,
+        setListeners: setListeners
+    }
+}
+
+function LocationComponent(identifier) {
+
+    const id = identifier;
+
+    function getHtml() {
+        let htmlBuilder = [];
+
+        htmlBuilder.push(createInputStr(id, "text", "text-input"));
+
+        return createDivStr("", "", htmlBuilder.join(""));
+    }
+
+    function getJs() {
+        return document.getElementById(id).value;
+    }
+
+    return {
+        getHtml: getHtml,
+        getJs: getJs
+    }
+}
+
+function PersonComponent(identifier) {
+
+    const id = identifier;
+
+    function getHtml() {
+        let htmlBuilder = [];
+
+        htmlBuilder.push(createInputStr(id, "text", "text-input"));
+
+        return createDivStr("", "", htmlBuilder.join(""));
+    }
+
+    function getJs() {
+        return document.getElementById(id).value;
+    }
+
+    return {
+        getHtml: getHtml,
+        getJs: getJs
+    }
+}
+
+function ActivityComponent(identifier) {
+
+    const id = identifier;
+    const addScheduleButtonId = id + "#addSchedule";
+    const addLocationButtonId = id + "#addLocation";
+    const addPersonButtonId = id + "#addPerson";
+
+    let schedules = [];
+    let locations = [];
+    let people = [];
+
+    function addLocation() {
+        locations.push(LocationComponent(id + "#location" + locations.length));
+
+        let el = document.getElementById(id + "#locations");
+        el.innerHTML += locations[locations.length - 1].getHtml();
+    }
+
+    function addSchedule() {
+        schedules.push(ScheduleComponent(id + "#schedule" + schedules.length));
+        
+        let el = document.getElementById(id + "#schedules");
+        el.innerHTML += schedules[schedules.length - 1].getHtml();
+
+        for(let i = 0; i < schedules.length; i++) {
+            schedules[i].setListeners();
+        }
+    }
+
+    function addPerson() {
+        people.push(PersonComponent(id + "#person" + people.length));
+
+        let el = document.getElementById(id + "#people");
+        el.innerHTML += people[people.length - 1].getHtml();
+    }
+
+    function setListeners() {
+        for(let i = 0; i < schedules.length; i++) {
+            schedules[i].setListeners();
+        }
+
+        document.getElementById(addScheduleButtonId).addEventListener("click", addSchedule);
+        document.getElementById(addLocationButtonId).addEventListener("click", addLocation);
+        document.getElementById(addPersonButtonId).addEventListener("click", addPerson);
+    }
+
+    
+
+    function getHtml() {
+        let htmlBuilder = [];
+
+        htmlBuilder.push("<div class=\"activity\"");
+
+        htmlBuilder.push("id=\"");
+        htmlBuilder.push(id);
+        htmlBuilder.push("\">");
+
+        htmlBuilder.push(createDivStr(id + "#schedules", "", "<h3>Horários<h3>"));
+        htmlBuilder.push(createButtonStr(addScheduleButtonId, "activity-button", "Adicionar Schedule"));
+
+        htmlBuilder.push(createDivStr(id + "#locations", "", "<h3>Localizações</h3>"));
+        htmlBuilder.push(createButtonStr(addLocationButtonId, "activity-button", "Adicionar Localização"));
+
+        htmlBuilder.push(createDivStr(id + "#people", "", "<h3>Pessoas</h3>"));
+        htmlBuilder.push(createButtonStr(addPersonButtonId, "activity-button", "Adicionar Pessoas"));
+
+        htmlBuilder.push("<div><h3>Valor: </h3>");
+        htmlBuilder.push(createInputStr(id + "#value", "number", "text-input"));
+        htmlBuilder.push("</div>");
+
+        htmlBuilder.push(createButtonStr(id + "#activity", "activity-button", "Adicionar atividade."));
+
+        htmlBuilder.push("</div>");
+
+        console.log(htmlBuilder.join(""));
+
+        return htmlBuilder.join("");
+    }
+
+    function getJs() {
+
+        let schedulesJs = [];
+        for(let i = 0; i < schedules.length; i++) {
+            schedulesJs.push(schedules[i].getJs());
+        }
+
+        let locationsJs = [];
+        for(let i = 0; i < locations.length; i++) {
+            locationsJs.push(locations[i].getJs());
+        }
+
+        let peopleJs = [];
+        for(let i = 0; i < people.length; i++) {
+            peopleJs.push(people[i].getJs());
+        }
+
+        let value = parseFloat(document.getElementById(id + "#value").value);
+
+        return {
+            schedules: schedulesJs,
+            locations: locationsJs,
+            people: peopleJs,
+            value: value
+        };
+    }
+
+    return {
+        getHtml: getHtml,
+        addSchedule: addSchedule,
+        setListeners: setListeners,
+        getJs: getJs
+    };
+}
+
+
+let activity = ActivityComponent("activity");
+let creation = document.getElementById("create-activity");
+
+function resetActivitySelection() {
+    activity = ActivityComponent("activity");
+    creation.innerHTML = activity.getHtml();
+    activity.setListeners();
+
+    let createActivityButton = document.getElementById("activity#activity");
+    createActivityButton.addEventListener("click", function() {
+        let data = activity.getJs();
+        resetActivitySelection();
+    
+        loadedActivities.activities.push(data);
+        const colors = unoptimizedCalendar.update(loadedActivities.activities);
+        showCalendar(loadedActivities.activities, activitiesList, colors);
+    });
+}
+
+resetActivitySelection();
+
+
+
+
+function CalendarManager(source) {
+    const activityColors = ['#3498db', '#2ecc71', '#e67e22', '#e74c3c', '#9b59b6', '#1abc9c', '#f1c40f', '#34495e'];
+
+    let calendar = new EventCalendar(document.getElementById(source), {
+        view: 'dayGridMonth',
+        events: []
+    });
+
+
+
+    function update(activities) {
+
+        let ids = [];
+        let events = calendar.getEvents();
+        for(let i = 0; i < events.length; i++) {
+            ids.push(events[i].id);
+        }
+
+        for(let i = 0; i < ids.length; i++) {
+            calendar.removeEventById(ids[i]);
+        }
+
+        let colors = [];
+        for(let i = 0; i < activities.length; i++) {
+            const schedules = activities[i].schedules;
+            const colorIndex = Math.floor(Math.random() * 7.9999);
+            const color = activityColors[colorIndex];
+            colors.push(color);
+
+            for(let j = 0; j < schedules.length; j++) {
+                const intervals = schedules[j].intervals;
+                for(let k = 0; k < intervals.length; k++) {
+                    const interval = intervals[k];
+                    calendar.addEvent({
+                        id: 0,
+                        start: new Date(interval.start),
+                        end: new Date(interval.end),
+                        startEditable: false,
+                        backgroundColor: color
+                    });
+                }
+            }
+        }
+
+        return colors;
+    }
+
+    return {
+        update: update
+    }
+}
+
+let unoptimizedCalendar = CalendarManager('unoptimized');
+let optimizedCalendar = CalendarManager('optimized');
+
 const activitiesList = document.getElementById('loadedCalendar');
 const answer = document.getElementById('answer');
-var loadedActivities = {'name': null, 'password': null, 'activities': null};
+var loadedActivities = {'name': null, 'password': null, 'activities': []};
 
-async function showCalendar(activities, element) {
+
+function showCalendar(activities, element, colors) {
     var ul = document.createElement('ul');
     for(var i = 0; i < activities.length; i++) {
         var act = activities[i];
 
         var newLi = document.createElement("li");
         var ul2 = document.createElement('ul');
+        ul2.style.backgroundColor = colors[i];
+
         newLi.appendChild(ul2);
+
+        var liId = document.createElement('li');
+        var id = document.createTextNode('ID = ' + String(i));
+        liId.appendChild(id);
+        ul2.appendChild(liId);
+        // newLi.innerHTML += "<p>id: " + toString(i) + "</p>";
 
         var liVal = document.createElement('li');
         var texVal = document.createTextNode('Valor = '+act.value.toString());
@@ -320,8 +714,8 @@ async function showCalendar(activities, element) {
         ul.appendChild(newLi);
     }
     element.innerHTML = '';
-    texActs = document.createTextNode('Lista de atividades carregadas:\n');
-    element.appendChild(texActs);
+    // texActs = document.createTextNode('Lista de atividades carregadas:\n');
+    // element.appendChild(texActs);
     element.appendChild(ul);
 }
 
@@ -330,35 +724,27 @@ window.onload = function() {
     var pwd = getCookie('password');
     if (usr && pwd) {
         const respons = sendPost('/authUser/', {name: usr, password: pwd}).then(response => {
-                if(response.auth) {
-                    loadedActivities.name = usr;
-                    loadedActivities.password = pwd;
-                } else {
-                    location.href = '/';
-                }
-            });
+            if(response.auth) {
+                loadedActivities.name = usr;
+                loadedActivities.password = pwd;
+            } else {
+                location.href = '/';
+            }
+        });
     } else {
         location.href = '/';
     }
 };
 
-function cleanScreen() {
-    activitiesList.innerHTML = 'Atividades carregadas aparecerão aqui!';
-    loadedActivities.activities = null;
-    answer.innerHTML = 'Escolha ótima aparecerá aqui '
-}
 
 
 const importFileButton = document.getElementById('importFile');
 const exportFileButton = document.getElementById('exportFile');
-const createButton = document.getElementById('create');
 const readButton = document.getElementById('read');
 const updateButton = document.getElementById('update');
 const deleteButton = document.getElementById('delete');
 const computeButton = document.getElementById('compute');
-const visualizeButton = document.getElementById('visualize');
 const cleanButton = document.getElementById('clean');
-
 
 /*--------------------------------------------------------------------------------------------------------------- */
 /**
@@ -387,6 +773,8 @@ function selectFile(contentType, multiple){
 }
 /*--------------------------------------------------------------------------------------------------------------- */
 
+
+
 importFileButton.addEventListener('click', async function() {
     // Abrir janela de escolher arquivo JSON
     var fil = await selectFile('json',false);
@@ -395,9 +783,11 @@ importFileButton.addEventListener('click', async function() {
     fr.onload = function (e) {
         var data = fr.result;
         var activities = JSON.parse(data).activities;
-        cleanScreen();
+        
         loadedActivities.activities = activities;
-        showCalendar(activities,activitiesList);
+        
+        const colors = unoptimizedCalendar.update(loadedActivities.activities);
+        showCalendar(activities, activitiesList, colors);
     }
     fr.readAsText(fil);
 });
@@ -415,11 +805,6 @@ exportFileButton.addEventListener('click', function() {
     }
 });
 
-createButton.addEventListener('click', function() {
-    // Abrir janelinha pra preencher os dados da atividade
-    // Quando o usuário clica em concluído, salva no banco de dados e mostra na listinha
-});
-
 readButton.addEventListener('click', async function() {
     // Mandar um aviso de que vai sobrescrever oq tah na tela atualmente pelo que tá salvo no sistema
     var conf;
@@ -435,9 +820,10 @@ readButton.addEventListener('click', async function() {
         var resp = await calend;
         if(resp.activities.length) {
             var activities = resp.activities;
-            cleanScreen();
+            
             loadedActivities.activities = activities;
-            showCalendar(activities,activitiesList);
+            const colors = unoptimizedCalendar.update(loadedActivities.activities);
+            showCalendar(activities, activitiesList, colors);
         } else {
             alert("Não há nada salvo ainda!");
         }
@@ -460,7 +846,9 @@ deleteButton.addEventListener('click', function() {
     if(confirm("Os dados no sistema E na sua tela serão permanentemente deletados! Deseja continuar?")) {
         // Apaga todas atividades no BD e na tela
         sendPost('/homepage/deleteCalendar/', loadedActivities);
-        cleanScreen();
+        resetActivitySelection();
+        unoptimizedCalendar.update([]);
+        optimizedCalendar.update([]);
     }
 });
 
@@ -470,7 +858,8 @@ computeButton.addEventListener('click', async function() {
         let promis = sendPost('/homepage/optimizeCalendar/', loadedActivities);
         var resp = await promis;
         if(resp.activities.length) {
-            showCalendar(resp.activities,answer)
+            const colors = optimizedCalendar.update(resp.activities);
+            showCalendar(resp.activities, answer, colors);
         } else {
             alert("Nennuma resposta recebida! (provavelmente o problema é grande demais)");
         }
@@ -480,16 +869,10 @@ computeButton.addEventListener('click', async function() {
     
 });
 
-visualizeButton.addEventListener('click', function() {
-    // Abrir janelinha com as opções de mostrar como semana mês ano etc (queremos isso?)
-    // Carregar visualização em formato de calendário com eventos nos horários
-    // Talvez nem precise desse botão e possa carregar automaticamente.
-    // Talvez esse botão troque entre a visualização como lista e a visualização como calendário
-});
-
 cleanButton.addEventListener('click', function() {
     // Limpar dados que estão sendo apresentados
     if(confirm("Os dados apresentados serão apagados da sua tela! Deseja continuar?")) {
-        cleanScreen();
+        resetActivitySelection();
+        loadedActivities.activities = [];
     }
 });

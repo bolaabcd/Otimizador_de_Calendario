@@ -5,29 +5,54 @@
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Otimizador de calendário</title>
+
+        <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.3.3/event-calendar.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.3.3/event-calendar.min.js"></script>
+
     </head>
     <body>
-        <input id="file-input" type="file" name="name" style="display: none;" /> <!-- Invisivel mesmo -->
-        <button id = 'importFile'>Importar atividades de arquivo</button> <!-- Soh importa pra tela -->
-        <button id = 'exportFile'>Exportar atividades para arquivo</button>
-        <button id = 'create'>Criar atividade</button> <!-- nao sincroniza com o banco de dados -->
-        <button id = 'delete'>Remover atividades</button> <!-- nao sincroniza com o banco de dados -->
-        <button id = 'read'>Carregar atividades salvas no sistema</button> 
-        <button id = 'update'>Salvar atividades no sistema</button>
-        <button id = 'compute'>Computar escolha ótima</button>
-        <!-- TODO: Talvez queiramos mostrar como um calendario mesmo, estilo google calendar, e talvez nem precise de botão pra isso -->
-        <button id = 'visualize'>Visualizar calendário (pode ignorar esse)</button>
-        <button id = 'goBack'> Voltar para página de login</button>
-        <button id = 'clean'> Limpar atividades na tela</button>
 
-        <p></p>
-        <div id = 'loadedCalendar'>Atividades carregadas aparecerão aqui!</div>
-        {% csrf_token %}
-        <p></p>
-        <p></p>
-        <p>Escolha ótima:</p>
-        <div id = 'answer'>Escolha ótima aparecerá aqui </div>
+        
+        <div class="page">
+            <div class="lateral-bar">
+                <button id = 'goBack'>Sair</button>
 
-        <script src="{% static 'js/homepage.js' %}"></script>
+                <button id = 'importFile'>Importar atividades</button> <!-- Soh importa pra tela -->
+                <button id = 'exportFile'>Exportar atividades</button>
+            
+                <button id = 'delete'>Remover atividade</button> <!-- nao sincroniza com o banco de dados -->
+                <button id = 'clean'> Limpar atividades</button>
+                
+                <button id = 'read'>Carregar atividades</button> 
+                <button id = 'update'>Salvar atividades</button>
+     
+                <button id = 'compute'>Otimizar</button>
+            </div>
+
+            <div class="content">
+
+                <div id='create-activity'>
+                    
+                </div>
+
+                <input id="file-input" type="file" name="name" style="display: none;" /> <!-- Invisivel mesmo -->
+                
+                <h2 class="subtitle">Suas Atividades:</h2>
+                <p></p>
+                <div id = 'loadedCalendar'></div>
+                <p></p>
+                
+                <div id="unoptimized"></div>
+
+                <p></p>
+                <h2 class="subtitle">Escolha ótima:</h2>
+                <div id = 'answer'></div>
+                
+                <div id="optimized"></div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="{% static 'js/homepage.js' %}"></script>
     </body>
 </html>
