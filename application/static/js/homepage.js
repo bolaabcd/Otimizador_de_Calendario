@@ -584,7 +584,6 @@ function CalendarManager(source) {
 
 
     function update(activities) {
-
         let ids = [];
         let events = calendar.getEvents();
         for(let i = 0; i < events.length; i++) {
