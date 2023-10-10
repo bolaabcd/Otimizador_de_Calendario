@@ -14,12 +14,11 @@ A partir deste terminal crie um um novo banco de dados, crie um novo usuário e 
 
 Para a configuração do mysql com django, segui esse vídeo https://www.youtube.com/watch?v=ZGGiBGTv9do
 
-1.
-CREATE DATABASE otimizador_db CHARACTER SET = utf8 COLLATE utf8_general_ci;
-2.
-CREATE USER 'usuario'@'localhost' IDENTIFIED WITH mysql_native_password BY 'engsoft@123';
-3.
-GRANT ALL PRIVILEGES ON otimizador_db.* TO 'usuario'@'localhost' WITH GRANT OPTION;
+1. `CREATE DATABASE otimizador_db CHARACTER SET = utf8 COLLATE utf8_general_ci;`
+
+2. `CREATE USER 'usuario'@'localhost' IDENTIFIED WITH mysql_native_password BY 'engsoft@123';`
+
+3. `GRANT ALL PRIVILEGES ON otimizador_db.* TO 'usuario'@'localhost' WITH GRANT OPTION;`
 
 
 Após serem feitas alterações relacionadas ao banco de dados:
