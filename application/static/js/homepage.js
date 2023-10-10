@@ -642,12 +642,13 @@ function showCalendar(activities, element, colors) {
         ul2.style.backgroundColor = colors[i];
 
         newLi.appendChild(ul2);
-
-        var liId = document.createElement('li');
-        var id = document.createTextNode('ID = ' + String(i));
-        liId.appendChild(id);
-        ul2.appendChild(liId);
-        // newLi.innerHTML += "<p>id: " + toString(i) + "</p>";
+        if(element != answer) {
+            var liId = document.createElement('li');
+            var id = document.createTextNode('ID = ' + String(i));
+            liId.appendChild(id);
+            ul2.appendChild(liId);
+            // newLi.innerHTML += "<p>id: " + toString(i) + "</p>";
+        }
 
         var liVal = document.createElement('li');
         var texVal = document.createTextNode('Valor = '+act.value.toString());
@@ -744,6 +745,7 @@ const updateButton = document.getElementById('update');
 const deleteButton = document.getElementById('delete');
 const computeButton = document.getElementById('compute');
 const cleanButton = document.getElementById('clean');
+const goBackButton = document.getElementById('goBack');
 
 /*--------------------------------------------------------------------------------------------------------------- */
 /**
@@ -842,13 +844,14 @@ updateButton.addEventListener('click', function() {
 
 deleteButton.addEventListener('click', function() {
     // Abre aviso de que vai apagar todas as atividades
-    /*if(confirm("Os dados no sistema E na sua tela serão permanentemente deletados! Deseja continuar?")) {
-        // Apaga todas atividades no BD e na tela
-        sendPost('/homepage/deleteCalendar/', loadedActivities);
-        resetActivitySelection();
-        unoptimizedCalendar.update([]);
-        optimizedCalendar.update([]);
-    }*/
+    let act = prompt("Digite o ID da atividade a remover:");
+    if(act < loadedActivities.activities.length && act >= 0) {
+        loadedActivities.activities.splice(act ,1);
+        const colors = unoptimizedCalendar.update(loadedActivities.activities);
+        showCalendar(loadedActivities.activities, activitiesList, colors);
+    } else {
+        alert("Não há atividade com esse ID na sua tela.")
+    }
 });
 
 computeButton.addEventListener('click', async function() {
@@ -878,4 +881,8 @@ cleanButton.addEventListener('click', function() {
 		showCalendar([],activitiesList,[]);
         loadedActivities.activities = [];
     }
+});
+
+goBackButton.addEventListener('click', function () {
+    location.href = '/';
 });
