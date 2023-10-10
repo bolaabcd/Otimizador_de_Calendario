@@ -23,7 +23,6 @@ class SaveCalendarController(ISaveCalendarController):
         calendar = parseCalendar(data)
         if calendar is None:
             return HttpResponseBadRequest()
-            
         result = self.__service.saveCalendar(calendar, user)
         data = {'save': result}
         return self.__requests.sendData(data)

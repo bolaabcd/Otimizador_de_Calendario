@@ -12,12 +12,9 @@ def parseInterval(data: dict) -> Optional[Interval]:
             return None
         
         dateFormat = '%Y-%m-%d %H:%M:%S'
-        originalFormat = '%Y-%m-%dT%H:%M:%SZ'
+        originalFormat = '%Y-%m-%dT%H:%M:%S'
         warnings.filterwarnings("ignore", category=RuntimeWarning) 
-        return Interval(
-            datetime.strptime(data['start'], originalFormat).strftime(dateFormat),
-            datetime.strptime(data['end'], originalFormat).strftime(dateFormat)
-        )
+        return Interval(data['start'].replace('T', ' ').replace('Z',' '), data['end'].replace('T', ' ').replace('Z', ' '))
     except:
         return None
     

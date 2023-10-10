@@ -7,7 +7,6 @@ from .scheduleParser import parseSchedule
 def parseActivity(data: dict) -> Optional[Activity]:
     try:
         schedules = []
-
         for scheduleDict in data['schedules']:
             schedule = parseSchedule(scheduleDict)
             if schedule is None:
