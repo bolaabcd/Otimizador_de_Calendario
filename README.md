@@ -13,9 +13,9 @@ Ana Luiza - Backend
 
 Artur Gaspar - Fullstack 
 
-Denilson Martins - Backend 
+Denilson Martins - Fullstack 
 
-Vinicius Bonfim - Front End 
+~Vinicius Bonfim - Front End~ 
 
 ## Tecnologias (linguagem, frameworks e BD)
 Backend: Python (Django)
@@ -24,7 +24,7 @@ Banco de Dados: MySQL
 
 Resolvedor de Programação Inteira: GLPK
 
-Frontend: Python (Django)
+Frontend: Django Templates
 
 
 ## Backlog do produto:
@@ -54,7 +54,42 @@ Frontend: Python (Django)
 
 ## Backlog da sprint:
 
-Histórias 1, 2, 3 e 4 do Backlog do produto.
+Histórias 1, 2, 3 e 4 do Backlog do produto (como extra fizemos uma autenticação bem simples).
+
+Tarefas e Responsáveis:
+
+1) Como usuário, gostaria de CRUD (Create, Read, Update, Delete) atividades no sistema (horário, local, pessoa envolvida, valor associado).
+
+- Preparar pipenv (Denilson)
+- Preparar banco de dados e Django models (Ana)
+- Implementar CRUD básico no Back-End (Denilson)
+- Criar e testar primeiras atividades (Artur)
+- Implementar uma versão inicial da interface de Read, Update e Delete (Artur)
+- Implementar uma versão inicial da interface de Create (Denilson)
+- Aprimorar interface da página (Denilson)
+
+2) Como usuário, gostaria de poder especificar alternativas de horários, locais e Indivíduos para cada atividade, além das minhas preferências de valor de cada atividade.
+
+- Criar no Back-End classes principais (Denilson)
+- Modelagem desses dados no banco de dados (Ana)
+- Criar exemplos simples para testagem (Artur)
+- Fazer interface no Front-End para especificação dessas informações (Denilson)
+
+3) Como usuário, gostaria de descobrir a escolha ótima de atividades possíveis de fazer segundo minhas preferências e restrições.
+
+- Instalar e preparar resolvedor de Programação Mista (Artur)
+- Implementar modelagem do problema como Programação Inteira (Artur)
+- Converter dados do formato disponível no Back-End pro formato do resolvedor (Artur)
+- Testar com diferentes casos as restrições e valores ótimos (Artur)
+
+4) Como usuário, gostaria de poder exportar e importar os dados das minhas atividades e de escolhas ótimas.
+
+- Implementar representação dos dados das atividades como formato JSON (Artur)
+- Implementar funcionalidade dos botões de importar e exportar dados no Front-End (Artur)
+- Verificar se o mesmo formato de arquivo continua funcionando em navegadores e SO diferentes (Ana)
+- Aprimorar interface no Front-End (Denilson)
+
+## Setup
 
 Siga para README-SETUP 
 
