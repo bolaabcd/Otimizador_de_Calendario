@@ -700,7 +700,7 @@ function showCalendar(activities, element, colors) {
             for(var k = 0; k < schedul.length; k++) {
                 var interv = schedul[k];
                 var liInterv = document.createElement('li');
-                var texInterv = document.createTextNode('Começo = '+interv.start+', Fim = '+interv.end);
+                var texInterv = document.createTextNode('Começo = '+interv.start.replace('T',' ')+', Fim = '+interv.end.replace('T',' '));
                 liInterv.appendChild(texInterv);
                 ulSched.appendChild(liInterv);
             }
