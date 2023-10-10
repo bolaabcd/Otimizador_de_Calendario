@@ -10,7 +10,7 @@ class ActivityIDs:
 
 # Gets incompatible times
 def getIncompTimes(times):
-    ans = []
+    ans = [(i,i) for i in range(len(times))]
     tenum = enumerate(times)
     for (i, ins1), (j, ins2) in combinations(tenum,2):
         for a, b in ins1:
