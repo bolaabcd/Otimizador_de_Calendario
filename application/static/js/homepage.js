@@ -34,7 +34,7 @@ var _global = typeof window === 'object' && window.window === window
 function bom(blob, opts) {
   if (typeof opts === 'undefined') opts = { autoBom: false }
   else if (typeof opts !== 'object') {
-    console.warn('Deprecated: Expected the third argument to be an object')
+    console.warn('Obsoleto: esperava-se que o terceiro argumento fosse um objeto.')
     opts = { autoBom: !opts }
   }
 
@@ -55,7 +55,7 @@ function download(url, name, opts) {
     saveAs(xhr.response, name, opts)
   }
   xhr.onerror = function () {
-    console.error('Could not download the file')
+    console.error('Não foi possível baixar o arquivo.')
   }
   xhr.send()
 }
@@ -145,7 +145,7 @@ var saveAs = _global.saveAs || (
     // Mostly only available on user interaction, and the FileReader is async
     popup = popup || open('', '_blank')
     if (popup) {
-      popup.document.title = popup.document.body.innerText = 'downloading...'
+      popup.document.title = popup.document.body.innerText = 'Fazendo download...'
     }
 
     if (typeof blob === 'string') return download(blob, name, opts)
@@ -186,12 +186,12 @@ async function sendGet(url) {
     return fetch(url)
         .then(response => {
             if (!response.ok) {
-                throw new Error('ERROR');
+                throw new Error('ERRO');
             }
             return response.json();
         })
         .catch(error => {
-            console.log('ERROR');
+            console.log('ERRO');
         });
 }
 
@@ -231,7 +231,7 @@ async function sendPost(url, data) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('ERROR');
+            throw new Error('ERRO');
         }
 
         const contentType = response.headers.get('content-type');
@@ -328,7 +328,7 @@ function getHtml() {
     htmlBuilder.push("Início: ");
     htmlBuilder.push(createInputStr(getStartId(), "datetime-local", "date-input"));
 
-    htmlBuilder.push(" Fim: ");
+    htmlBuilder.push("Fim: ");
     htmlBuilder.push(createInputStr(getEndId(), "datetime-local", "date-input"));
 
     htmlBuilder.push("</div>");
@@ -899,7 +899,7 @@ readButton.addEventListener('click', async function() {
     // Display a confirmation prompt if there are activities on the screen
     var conf;
     if (loadedActivities.activities.length != 0) {
-        conf = confirm("The data on your screen will be overwritten by what is saved in the system! Do you want to continue?");
+        conf = confirm("Os dados da sua tela serão substituídos pelos que estão salvos no sistema! Deseja continuar?");
     } else {
         conf = true;
     }
@@ -923,7 +923,7 @@ readButton.addEventListener('click', async function() {
 updateButton.addEventListener('click', function() {
     // Send only the updated version of activities to the database
     if (loadedActivities.activities) {
-        if (confirm("The data in the system will be overwritten by what's on your screen. Do you want to continue?")) {
+        if (confirm("Os dados do sistema serão substituídos pelo que estiver na sua tela. Deseja continuar?")) {
             sendPost('/homepage/saveCalendar/', loadedActivities);
         }
     } else {
@@ -964,7 +964,7 @@ computeButton.addEventListener('click', async function() {
 // Event listener for the "Clean" button
 cleanButton.addEventListener('click', function() {
     // Clear data being displayed on the screen
-    if (confirm("The data being displayed on your screen will be cleared. Do you want to continue?")) {
+    if (confirm("Os dados exibidos na tela serão apagados. Deseja continuar?")) {
         resetActivitySelection();
         unoptimizedCalendar.update([]);
         optimizedCalendar.update([]);

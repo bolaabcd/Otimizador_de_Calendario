@@ -40,7 +40,7 @@ async function sendPost(url, data) {
         });
 
         if (!response.ok) {
-            throw new Error('ERROR');
+            throw new Error('ERRO');
         }
 
         const contentType = response.headers.get('content-type');
@@ -55,7 +55,7 @@ async function sendPost(url, data) {
         }
     } catch (error) {
         // Handle errors here
-        console.error('Error:', error);
+        console.error('Erro:', error);
     }
 }
 
