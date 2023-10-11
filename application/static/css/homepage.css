@@ -1,3 +1,12 @@
+/* Style for unordered lists inside 'answer' */
+#answer ul {
+    padding: 10px;
+    padding-left: 30px;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 15px;
+}
+
 /* Set default styling for the body and div elements */
 body, div {
     font-family: sans-serif;

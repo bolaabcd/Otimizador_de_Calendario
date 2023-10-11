@@ -16,7 +16,7 @@ def getIncompTimes(times):
         for a, b in ins1:
             out = False
             for c, d in ins2:
-                if a <= c < b or a < d <= b:
+                if a <= c < b or a < d <= b or c <= a < d or c < b <= d:
                     ans.append((i, j))
                     out = True
                     break
