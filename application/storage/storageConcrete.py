@@ -1,7 +1,7 @@
 
 from .storage import Storage
 from ..domain.domainTypes import User, Activity
-from typing import Optional, Tuple, List
+from typing import Optional, List
 from ..models import UserDB, ActivityDB, ScheduleDB, IntervalDB, PersonDB, LocationDB
 
 

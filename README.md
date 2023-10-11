@@ -1,14 +1,16 @@
-# Otimizador de Calendário (em desenvolvimento)
+# Calendar Optimizer (under development)
 
-## Escopo do sistema (objetivo e principais features):
-Este projeto consiste em uma interface para otimizar uma escolha de atividades a serem realizadas, de acordo com as preferências do usuário e restrições fornecidas. O usuário especifica as atividades dentre as quais gostaria de escolher e os horários que pode fazê-las, além de outras possíveis restrições (ter ao menos 1h de tempo livre por dia, não fazer duas atividades ao mesmo tempo). Além disso, é possível associar um valor subjetivo a cada atividade, e este programa computará qual escolha de atividades maximiza a soma dos valores sem violar as restrições dadas.
+## Scope (Objective and Key Features):
 
-Com isso, é possível por exemplo, escolher dentre vários cursos com horários conflitantes, um conjunto de cursos sem conflito de horário cujo preço total fica o mais barato possível. Um exemplo mais complexo: o usuário pode ser o departamento de uma faculdade, que gostaria de maximizar a quantidade de disciplinas ofertadas num semestre sem conflito de sala e de horários, e sem que nenhum professor trabalhe por mais que 8 horas por dia.
+This project consists of an interface to optimize the selection of activities to be performed based on user preferences and provided constraints. The user specifies the activities they would like to choose from, and the times they are available to perform them, along with any other potential constraints, and any other potential restrictions (such as having at least 1 hour of free time per day or not scheduling two activities simultaneously). Additionally, it's possible to assign a subjective value to each activity, and this application will compute the choice of activities that maximizes the sum of values without violating the given constraints.
 
-Este projeto está sendo desenvolvido como trabalho prático para a disciplina de Engenharia de Software, da Universidade Federal de Minas Gerais (UFMG).
+As a result, it is possible, for instance, to choose from various courses with overlapping schedules a set of courses with no schedule conflicts, considering the lowest possible total cost. A more complex example: the user might represent a university department seeking to maximize the quantity of courses offered in a semester, ensuring there are no room or scheduling conflicts, and that no professor exceeds an 8-hour workday.
+
+This project is being developed as a practical assignment for the Software Engineering course at the Federal University of Minas Gerais (UFMG).
 
 
-## Membros da equipe e papel:
+## Team Members and respective Roles:
+
 Ana Luiza - Backend 
 
 Artur Gaspar - Fullstack 
@@ -17,79 +19,80 @@ Denilson Martins - Fullstack
 
 ~Vinicius Bonfim - Front End~ 
 
-## Tecnologias (linguagem, frameworks e BD)
+## Technologies (language, frameworks and DB):
+
 Backend: Python (Django)
 
-Banco de Dados: MySQL
+Database: MySQL
 
-Resolvedor de Programação Inteira: GLPK
+Integer Programming Solver: GLPK
 
 Frontend: Django Templates
 
 
-## Backlog do produto:
+## Product Backlog:
+
+1) As a user, I would like to perform CRUD (Create, Read, Update, Delete) operations for activities in the system (time, location, involved individuals, associated value).
+
+2) As a user, I would like to be able to specify alternative timings, locations, and individuals for each activity, in addition to my value preferences for each activity.
+
+3) As a user, I would like to determine the optimal choice of activities I can perform based on my preferences and constraints.
+
+4) As a user, I would like to export and import data for my activities and optimal choices.
+
+5) As a user, I would like to grant other users access to my activities and optimal choices (read and/or edit).
+
+6) As an admin, I would like to limit the amount of resources available to each user.
+
+7) As an admin, I would like to be able to ban and reinstate users.
+
+8) As a user, I would like to view my activities in a calendar format.
+
+9) As a user, I would like to export my activities to Google Calendar.
+
+10) As a user, I would like to configure activities on a weekly, monthly, or annual scope.
 
 
-1) Como usuário, gostaria de CRUD (Create, Read, Update, Delete) atividades no sistema (horário, local, pessoa envolvida, valor associado).
+## Sprint Backlog:
 
-2) Como usuário, gostaria de poder especificar alternativas de horários, locais e Indivíduos para cada atividade, além das minhas preferências de valor de cada atividade.
-
-3) Como usuário, gostaria de descobrir a escolha ótima de atividades possíveis de fazer segundo minhas preferências e restrições.
-
-4) Como usuário, gostaria de poder exportar e importar os dados das minhas atividades e de escolhas ótimas.
-
-5) Como usuário, gostaria de dar acesso às minhas atividades e escolhas ótimas para outros usuários (leitura e/ou edição).
-
-6) Como admin, gostaria de poder limitar a quantidade de recursos disponíveis para cada usuário.
-
-7) Como admin, gostaria de poder banir e readicionar usuários.
-
-8) Como usuário, gostaria de visualizar minhas atividades em formato de calendário.
-
-9) Como usuário, gostaria de exportar minhas atividades para o Google Calendar.
-
-10) Como usuário, gostaria de configurar atividades de escopo semanal, mensal ou anual.
+Stories 1, 2, 3 and 4 of the Product Backlog (as an extra we did a very simple authentication).
 
 
+## Tasks and Responsible Parties:
 
-## Backlog da sprint:
+1) As a user, I would like to perform CRUD (Create, Read, Update, Delete) operations for activities in the system (time, location, involved individuals, associated value).
 
-Histórias 1, 2, 3 e 4 do Backlog do produto (como extra fizemos uma autenticação bem simples).
+- Set up Pipenv (Denilson)
+- Prepare the database and Django models (Ana)
+- Implement basic CRUD operations in the Back-End (Denilson)
+- Create and test initial activities (Artur)
+- Implement an initial version of the Read, Update, and Delete interfaces (Artur)
+- Implement an initial version of the Create interface (Denilson)
+- Enhance the page interface (Denilson)
 
-Tarefas e Responsáveis:
+2) As a user, I would like to be able to specify alternative timings, locations, and individuals for each activity, in addition to my value preferences for each activity.
 
-1) Como usuário, gostaria de CRUD (Create, Read, Update, Delete) atividades no sistema (horário, local, pessoa envolvida, valor associado).
+- Create main classes in the Back-End (Denilson)
+- Model this data in the database (Ana)
+- Create simple examples for testing (Artur)
+- Develop a Front-End interface for specifying this information (Denilson)
 
-- Preparar pipenv (Denilson)
-- Preparar banco de dados e Django models (Ana)
-- Implementar CRUD básico no Back-End (Denilson)
-- Criar e testar primeiras atividades (Artur)
-- Implementar uma versão inicial da interface de Read, Update e Delete (Artur)
-- Implementar uma versão inicial da interface de Create (Denilson)
-- Aprimorar interface da página (Denilson)
+3) As a user, I would like to determine the optimal choice of activities I can perform based on my preferences and constraints.
 
-2) Como usuário, gostaria de poder especificar alternativas de horários, locais e Indivíduos para cada atividade, além das minhas preferências de valor de cada atividade.
+- Install and set up the Mixed-Integer Programming solver (Artur)
+- Implement problem modeling as Integer Programming (Artur)
+- Convert data from the format available in the Back-End to the solver's format (Artur)
+- Test constraints and optimal values for different scenarios (Artur)
 
-- Criar no Back-End classes principais (Denilson)
-- Modelagem desses dados no banco de dados (Ana)
-- Criar exemplos simples para testagem (Artur)
-- Fazer interface no Front-End para especificação dessas informações (Denilson)
+4) As a user, I would like to export and import data for my activities and optimal choices.
 
-3) Como usuário, gostaria de descobrir a escolha ótima de atividades possíveis de fazer segundo minhas preferências e restrições.
+- Implement data representation of activities in JSON format (Artur)
+- Implement functionality for import and export data buttons in the Front-End (Artur)
+- Verify if the same file format continues to work on different browsers and operating systems (Ana)
+- Enhance the Front-End interface (Denilson)
 
-- Instalar e preparar resolvedor de Programação Mista (Artur)
-- Implementar modelagem do problema como Programação Inteira (Artur)
-- Converter dados do formato disponível no Back-End pro formato do resolvedor (Artur)
-- Testar com diferentes casos as restrições e valores ótimos (Artur)
 
-4) Como usuário, gostaria de poder exportar e importar os dados das minhas atividades e de escolhas ótimas.
+## Set up
 
-- Implementar representação dos dados das atividades como formato JSON (Artur)
-- Implementar funcionalidade dos botões de importar e exportar dados no Front-End (Artur)
-- Verificar se o mesmo formato de arquivo continua funcionando em navegadores e SO diferentes (Ana)
-- Aprimorar interface no Front-End (Denilson)
-
-## Setup
-
-Siga para README-SETUP 
+Proceed to README-SETUP 
 

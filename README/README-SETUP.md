@@ -1,64 +1,63 @@
 ## Setup
 
-Necessário python 3.10
+Python 3.10 needs to be installed.
 
-pipenv:
+## pipenv:
 ```
 pip3 install pipenv
 ```
 
-Instalar pacotes
+## Install packages:
 ```
 pipenv install
 ```
 
-Instalar GLPK
+## Install GLPK:
 ```
 sudo apt install glpk-utils
 ```
 
-Entrar no venv:
+## Enter venv:
 ```
 pipenv shell
 ```
 
-Executar server:
+## Execute server:
 ```
 python3 manage.py runserver
 ```
 
-## Convenções
+## Conventions
 
-Declaração de variáveis e funções: Camel case, primeira letra minúscula
-Declaração de tipos: Camel case, primeira letra maiúscula
+Variable and function declaration: Camel case, starting with a lowercase letter.
+Type declaration: Camel case, starting with an uppercase letter.
 
-Identação: 4 espaços
+Indentation: 4 spaces.
 
+## Installation and Database Setup
 
-## Instalação e setup do Banco de Dados
-
-É necessário antes instalar o mysql:
+Before proceeding, it is necessary to install MySQL:
 ```
 sudo apt install libmysqlclient-dev
 ```
 
-Pode ser preciso também:
+It may also be necessary to:
 ```
 sudo apt install mysql-client-core-8.0
 ```
 
-Para instalar o servidor mysql pode ser preciso:
+To install the MySQL server, you may need to:
 ```
 sudo apt-get install mysql-server
 ```
 
-## CASO WSL
+## WSL case
 
 https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 
 https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 
-necessário rodar os seguintes códigos toda vez que reiniciar a wsl:
+It is necessary to run the following commands every time you restart the WSL:
 
 1.
 ```
@@ -80,4 +79,4 @@ ssh-add ~/.ssh/id_ed25519
 ssh-add -l
 ```
 
-Siga para README-MYSQL
+Proceed to README-MYSQL

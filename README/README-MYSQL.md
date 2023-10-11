@@ -1,18 +1,14 @@
-Se der tudo certo, será possível acessar o mysql. Talvez seja necessário sudo:
+If everything goes well, you will be able to access MySQL. You may need to use "sudo."
 ```
 mysql -u root -p
 ```
 
-Assim é possível entrar no mysql com outro usuário:
-```
-mysql -u teste -p
-```
-Ao digitar a senha corretamente, é esperado que você tenha acesso ao terminal do mysql.
+As you enter the correct password, you should have access to the MySQL terminal.
 
 
-A partir deste terminal crie um um novo banco de dados, crie um novo usuário e dê permissões à ele.
+From this terminal, create a new database, create a new user, and grant permissions to that user.
 
-Para a configuração do mysql com django, segui esse vídeo https://www.youtube.com/watch?v=ZGGiBGTv9do
+For configuring MySQL with Django, you may follow this video: https://www.youtube.com/watch?v=ZGGiBGTv9do
 
 1. `CREATE DATABASE otimizador_db CHARACTER SET = utf8 COLLATE utf8_general_ci;`
 
@@ -21,7 +17,7 @@ Para a configuração do mysql com django, segui esse vídeo https://www.youtube
 3. `GRANT ALL PRIVILEGES ON otimizador_db.* TO 'usuario'@'localhost' WITH GRANT OPTION;`
 
 
-Após serem feitas alterações relacionadas ao banco de dados:
+After making changes related to the database:
 ```
 python3 manage.py makemigrations
 python3 manage.py migrate

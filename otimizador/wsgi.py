@@ -1,5 +1,5 @@
 """
-WSGI config for otimizador project.
+WSGI config for optimizer project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

@@ -1,4 +1,5 @@
-{% load static %}
+{% load static %} <!-- Loads static CSS and JS files from Django app -->
+
 <!DOCTYPE html>
 <html lang='pt-br'>
     <head>
@@ -6,9 +7,9 @@
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Otimizador de calendário</title>
 
-        <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.3.3/event-calendar.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.3.3/event-calendar.min.js"></script>
+        <link rel="stylesheet" href="{% static 'css/homepage.css' %}"> <!-- Link to custom CSS file -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.3.3/event-calendar.min.css"> <!-- Link to external CSS file -->
+        <script src="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.3.3/event-calendar.min.js"></script> <!-- Include external JavaScript library -->    
 
     </head>
     <body>
@@ -18,10 +19,10 @@
             <div class="lateral-bar">
                 <button id = 'goBack'>Sair</button>
 
-                <button id = 'importFile'>Importar atividades</button> <!-- Soh importa pra tela -->
+                <button id = 'importFile'>Importar atividades</button> <!-- Only imports to screen -->
                 <button id = 'exportFile'>Exportar atividades</button>
             
-                <button id = 'delete'>Remover atividade</button> <!-- nao sincroniza com o banco de dados -->
+                <button id = 'delete'>Remover atividade</button> <!-- Does not sincronize with Database -->
                 <button id = 'clean'> Limpar atividades</button>
                 
                 <button id = 'read'>Carregar atividades</button> 
@@ -33,10 +34,10 @@
             <div class="content">
 
                 <div id='create-activity'>
-                    
+                    <!-- Content for creating a new activity can be added here -->
                 </div>
 
-                <input id="file-input" type="file" name="name" style="display: none;" /> <!-- Invisivel mesmo -->
+                <input id="file-input" type="file" name="name" style="display: none;" /> <!-- Input for file selection (invisible) -->
                 
                 <h2 class="subtitle">Suas Atividades:</h2>
                 <p></p>
@@ -53,6 +54,6 @@
             </div>
         </div>
 
-        <script type="text/javascript" src="{% static 'js/homepage.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/homepage.js' %}"></script> <!-- Link to custom JS file -->
     </body>
 </html>

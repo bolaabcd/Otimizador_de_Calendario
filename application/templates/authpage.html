@@ -1,16 +1,17 @@
-{% load static %}
+{% load static %} <!-- Loads static CSS and JS files from Django app -->
+
 <!DOCTYPE html>
 <html lang='pt-br'>
     <head>
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Otimizador de calendário</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/authpage.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/authpage.css' %}"> <!-- Link to custom CSS file -->
     </head>
     <body>
         <div class="container">
             <div class="form-container">
-                {% csrf_token %}
+                {% csrf_token %} <!-- Include the CSRF token as Django might not set the its cookie. -->
                 <label for="nick">Nome de usuário:</label><br>
                 <input type="text" id="nick" name="nick" value="" class="text-input"><br>
                 <label for="passwd">Senha:</label><br>
@@ -21,6 +22,6 @@
             </div>
         </div>
 
-        <script src="{% static 'js/authpage.js' %}"></script>
+        <script src="{% static 'js/authpage.js' %}"></script>  <!-- Link to custom JS file -->
     </body>
 </html>
