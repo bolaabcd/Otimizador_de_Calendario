@@ -7,7 +7,7 @@ from pulp import GLPK
 class ConcreteSolver(Solver):
     
     def solve(self, activities: List[Activity]) -> List[Activity]:
-        # Converting to a format that can be used by Integer Programming Solver:
+        # Converting to format that can be used by Integer Programming Solver:
         placesSet = set()
         peopleSet = set()
         timesSet = set()
