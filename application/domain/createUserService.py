@@ -1,11 +1,10 @@
-
 from .ICreateUserService import ICreateUserService
 from .domainTypes import User
 from ..storage.storage import Storage
 
-
 class CreateUserService(ICreateUserService):
 
+    # Constructor for the CreateUserService class
     def __init__(self, storage: Storage):
         self.__storage = storage
 
@@ -16,4 +15,3 @@ class CreateUserService(ICreateUserService):
             return True
         else:
             return False
-

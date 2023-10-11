@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from typing import List
 
@@ -8,7 +7,7 @@ class User:
         self.name = name
         self.password = password
 
-# Formato das datas: '%Y-%m-%d %H:%M:%S'
+# Dates format must be '%Y-%m-%d %H:%M:%S'
 class Interval:
     def __init__(self, start: datetime, end: datetime):
         self.start = start
