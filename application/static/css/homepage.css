@@ -1,3 +1,4 @@
+/* Set default styling for the body and div elements */
 body, div {
     font-family: sans-serif;
     height: 100%;
@@ -5,43 +6,47 @@ body, div {
     padding: 0;
 }
 
+/* Define styling for the main page container */
 .page {
     display: flex;
     height: 100%;
 }
 
+/* Style the lateral bar */
 .lateral-bar {
     position: fixed;
     width: 250px;
     height: 100%;
-
     border-right: 5px solid cadetblue;
     background-color: rgb(127, 149, 150);
 }
 
+/* Style for buttons inside the lateral bar */
 .lateral-bar button {
-    display: block; /* Isso garante que cada botão esteja em uma linha separada */
+    display: block; /* Ensures each button is on a separate line */
     width: 100%;
     padding: 10px;
-    margin: 5px 0; /* Espaçamento entre os botões */
+    margin: 5px 0; /* Spacing between buttons */
     border: none;
     background-color: transparent;
     color: azure;
-    text-align: left; /* Alinhamento do texto à esquerda */
+    text-align: left; /* Left-align the text */
     font-size: 20px;
 }
 
+/* Style for button hover state */
 .lateral-bar button:hover {
-    background-color: rgba(0, 0, 0, 0.2); /* Cor de fundo com transparência */
-    cursor: pointer; /* Altera o cursor para uma mãozinha */
+    background-color: rgba(0, 0, 0, 0.2); /* Transparent background color */
+    cursor: pointer; /* Change cursor to a hand pointer */
 }
 
-/* Estilos para os botões quando focados (tab ou click) */
+/* Styles for buttons when focused (tab or click) */
 .lateral-bar button:focus {
-    outline: none; /* Remove a borda padrão de foco */
-    box-shadow: 0 0 5px cadetblue; /* Adiciona uma sombra de foco */
+    outline: none; /* Remove the default focus outline */
+    box-shadow: 0 0 5px cadetblue; /* Add a focus shadow */
 }
 
+/* Style the content area to the right of the lateral bar */
 .content {
     float: right;
     width: 100%;
@@ -49,11 +54,13 @@ body, div {
     padding: 10px;
 }
 
+/* Style for elements with IDs 'loadedCalendar' and 'answer' */
 #loadedCalendar, #answer {
     border-bottom: 5px solid cadetblue;
     margin-bottom: 10px;
 }
 
+/* Style for unordered lists inside 'loadedCalendar' */
 #loadedCalendar ul {
     padding: 10px;
     padding-left: 30px;
@@ -62,12 +69,12 @@ body, div {
     margin-bottom: 15px;
 }
 
+/* Style for elements with class 'subtitle' */
 .subtitle {
     color: black;
 }
 
-
-
+/* Style for date input fields */
 .date-input {
     width: 20%;
     padding: 10px;
@@ -77,19 +84,18 @@ body, div {
     box-sizing: border-box;
 }
 
-/* Style for when the input is focused */
+/* Style for the input when focused */
 .date-input:focus {
     border-color: dodgerblue;
     box-shadow: 0 0 5px dodgerblue;
 }
 
-/* Style for placeholder text */
+/* Style for placeholder text in date inputs */
 .date-input::placeholder {
     color: #999;
 }
 
-
-/* Estilo para botão */
+/* Style for general buttons */
 .activity-button {
     padding: 10px 20px;
     font-size: 16px;
@@ -101,11 +107,12 @@ body, div {
     margin-bottom: 4px;
 }
 
-/* Estilo para quando o botão é hover (quando o mouse está sobre ele) */
+/* Style for button hover state */
 .activity-button:hover {
     background-color: rgb(101, 119, 120);
 }
 
+/* Style for text input fields */
 .text-input {
     padding: 10px;
     border: 1px solid #ccc;
@@ -116,6 +123,7 @@ body, div {
     margin-bottom: 4px;
 }
 
+/* Style for text input when focused */
 .text-input:focus {
     border-color: dodgerblue;
     box-shadow: 0 0 5px dodgerblue;
