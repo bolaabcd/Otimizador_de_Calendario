@@ -1,4 +1,4 @@
-# Calendar Optimizer (under development)
+# Calendar Optimizer
 
 ## Scope (Objective and Key Features):
 
