@@ -59,6 +59,19 @@ async function sendPost(url, data) {
     }
 }
 
+// Function to handle user login
+async function loginUserFunction() {
+    var namePwd = getUserData();
+    const response = await sendPost('/authUser/', { name: namePwd[0], password: namePwd[1] });
+    if (response.auth) {
+        setCookie('user', namePwd[0]);
+        setCookie('password', namePwd[1]);
+        location.href = '/homepage/';
+    } else {
+        alert("Usuário e/ou senha incorretos!"); // Incorrect username and/or password
+    }
+}
+
 const createUser = document.getElementById('create-user');
 const loginUser = document.getElementById('login-user');
 const nickInput = document.getElementById('nick');
@@ -96,15 +109,12 @@ createUser.addEventListener('click', async function() {
     }
 });
 
-// Event listener for logging in
-loginUser.addEventListener('click', async function() {
-    var namePwd = getUserData();
-    const response = await sendPost('/authUser/', { name: namePwd[0], password: namePwd[1] });
-    if (response.auth) {
-        setCookie('user', namePwd[0]);
-        setCookie('password', namePwd[1]);
-        location.href = '/homepage/';
-    } else {
-        alert("Usuário e/ou senha incorretos!"); // Incorrect username and/or password
+// Event listener for logging in when Enter key is pressed in the password field
+passwdInput.addEventListener('keydown', async function(event) {
+    if (event.key === 'Enter') {
+        loginUserFunction(); // Call the login function when Enter is pressed
     }
 });
+
+// Event listener for logging in after clicking on button
+loginUser.addEventListener('click', loginUserFunction);
